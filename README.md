@@ -1,4 +1,4 @@
 # crash-reporting
 
-This is the repository for crash-reporting. You're welcome to
+This is the repository for [crash-reporting](https://wicg.github.io/crash-reporting/index.html). You're welcome to
 [[contribute]](CONTRIBUTING.md)!
