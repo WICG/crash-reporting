@@ -1,6 +1,6 @@
 <h1>Crash Reporting</h1>
 <pre class="metadata">
-Status: ED
+Status: CG-DRAFT
 ED: https://wicg.github.io/crash-reporting/
 Shortname: crash-reporting
 Group: WICG
