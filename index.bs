@@ -25,15 +25,10 @@ Markup Shorthands: css off, markdown on
   <div class="example">
     Unstable, Inc. wants to understand better how often its website is crashing
     in the wild. It can do this by delivering the following header to define a
-    reporting endpoint, and direct crash reports to it:
+    default reporting endpoint, which will direct crash reports there:
 
     <pre>
-      Report-To: { "group": "default",
-                   "max_age": 10886400,
-                   "endpoints": [
-                     { "url": "https://example.com/reports", "priority": 1 },
-                     { "url": "https://backup.com/reports", "priority": 2 }
-                   ] }
+      Reporting-Endpoints: default="https://example.com/reports"
     </pre>
 
 </section>
