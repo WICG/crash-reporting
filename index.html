@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version d765c696b, updated Fri Mar 8 15:58:52 2024 -0800" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="d3a52a030031ecf29822439f20f49db2897a0ee3" name="revision">
+  <meta content="f5ffacff8d2e3be572b7433f05679c6c22f14f26" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -694,7 +694,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Crash Reporting</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-07-04">4 July 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-07-17">17 July 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -745,17 +745,18 @@ through the use of the Reporting API.</p>
       <li><a href="#concept-unresponsive"><span class="secno">2.3</span> <span class="content">Unresponsive</span></a>
      </ol>
     <li><a href="#crash-report"><span class="secno">3</span> <span class="content">Crash Reports</span></a>
+    <li><a href="#document-policy"><span class="secno">4</span> <span class="content">Document Policy Integration</span></a>
     <li>
-     <a href="#implementation"><span class="secno">4</span> <span class="content">Implementation Considerations</span></a>
+     <a href="#implementation"><span class="secno">5</span> <span class="content">Implementation Considerations</span></a>
      <ol class="toc">
-      <li><a href="#delivery"><span class="secno">4.1</span> <span class="content">Delivery</span></a>
+      <li><a href="#delivery"><span class="secno">5.1</span> <span class="content">Delivery</span></a>
      </ol>
-    <li><a href="#sample-reports"><span class="secno">5</span> <span class="content">Sample Reports</span></a>
-    <li><a href="#security"><span class="secno">6</span> <span class="content">Security Considerations</span></a>
+    <li><a href="#sample-reports"><span class="secno">6</span> <span class="content">Sample Reports</span></a>
+    <li><a href="#security"><span class="secno">7</span> <span class="content">Security Considerations</span></a>
     <li>
-     <a href="#privacy"><span class="secno">7</span> <span class="content">Privacy Considerations</span></a>
+     <a href="#privacy"><span class="secno">8</span> <span class="content">Privacy Considerations</span></a>
      <ol class="toc">
-      <li><a href="#cross-process-contamination"><span class="secno">7.1</span> <span class="content">Cross-Process Contamination</span></a>
+      <li><a href="#cross-process-contamination"><span class="secno">8.1</span> <span class="content">Cross-Process Contamination</span></a>
      </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -798,9 +799,10 @@ optionally the reason for the crash (such as "oom").</p>
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="crashreportbody"><code><c- g>CrashReportBody</c-></code></dfn> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody" id="ref-for-reportbody"><c- n>ReportBody</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default" id="ref-for-Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object"><c- b>object</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="method" data-export data-lt="toJSON()" id="dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></dfn>();
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-stack"><code><c- g>stack</c-></code></dfn>;
 };
 </pre>
-   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following field:</p>
+   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
@@ -818,6 +820,22 @@ type of crash that occured, if known, or omitted otherwise. The valid <a data-li
       <td>unresponsive
       <td>The page was killed due to being unresponsive.
    </table>
+   <ul>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-stack">stack</dfn>: The string representation of the
+JavaScript call stack at the time of the crash, if all of the following are
+true, or omitted otherwise:</p>
+     <ul>
+      <li data-md>
+       <p>The crash <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason②">reason</a> is "unresponsive".</p>
+      <li data-md>
+       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">Document</a> which crashed is <code>true</code>.</p>
+      <li data-md>
+       <p>The call stack can be recovered from the crashed document.</p>
+     </ul>
+     <p>The string representation used for <a data-link-type="dfn" href="#crashreportbody-stack" id="ref-for-crashreportbody-stack">stack</a> is the
+same as that used by the <a data-link-type="dfn" href="https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack" id="ref-for-sec-get-error.prototype-stack">Error.prototype.stack</a> property.</p>
+   </ul>
    <p class="note" role="note"><span class="marker">Note:</span> Crash reports are always delivered to the <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> named <code>default</code>;
 there is currently no way to override this.  If you want to receive other kinds
 of reports, but not crash reports, make sure to use a different name for the
@@ -826,8 +844,19 @@ endpoint that you choose for those reports.</p>
 receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.</p>
-   <h2 class="heading settled" data-level="4" id="implementation"><span class="secno">4. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
-   <h3 class="heading settled" data-level="4.1" id="delivery"><span class="secno">4.1. </span><span class="content">Delivery</span><a class="self-link" href="#delivery"></a></h3>
+   <h2 class="heading settled" data-level="4" id="document-policy"><span class="secno">4. </span><span class="content">Document Policy Integration</span><a class="self-link" href="#document-policy"></a></h2>
+   <p>Site authors may opt in to recording the JavaScript call stack with some
+reports.</p>
+   <p>This spec defines a <a data-link-type="dfn" href="https://wicg.github.io/document-policy/#configuration-point" id="ref-for-configuration-point">configuration point</a> with the name <code>include-js-call-stacks-in-crash-reports</code>. Its type is boolean, and its default
+value is <code>false</code>. When configured as <code>true</code> in a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">Document</a> for which crash
+reporting is enabled, this will cause a string representation of the JavaScript
+call stack, at the time of the crash, to be included in a crash report.</p>
+   <div class="example" id="example-565177e8">
+    <a class="self-link" href="#example-565177e8"></a> 
+<pre class="http">Document-Policy: include-js-call-stacks-in-crash-reports</pre>
+   </div>
+   <h2 class="heading settled" data-level="5" id="implementation"><span class="secno">5. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
+   <h3 class="heading settled" data-level="5.1" id="delivery"><span class="secno">5.1. </span><span class="content">Delivery</span><a class="self-link" href="#delivery"></a></h3>
    <p><a data-link-type="biblio" href="#biblio-reporting" title="Reporting API">[REPORTING]</a>, which defines the framework on which this specification depends,
 provides at most a best-efforts delivery mechanism. This is especially true when
 it comes to reporting crashes. There are probably always going to be certain
@@ -840,7 +869,7 @@ responsible for that document crashes, or is terminated by the operating system.
    <p>There are multiple ways to implement such a monitor, with varying levels of
 reliability and robustness to specific crash causes, and this specification does
 not attempt to prescribe any particular such method.</p>
-   <h2 class="heading settled" data-level="5" id="sample-reports"><span class="secno">5. </span><span class="content">Sample Reports</span><a class="self-link" href="#sample-reports"></a></h2>
+   <h2 class="heading settled" data-level="6" id="sample-reports"><span class="secno">6. </span><span class="content">Sample Reports</span><a class="self-link" href="#sample-reports"></a></h2>
    <div class="example" id="example-d65bd545">
     <a class="self-link" href="#example-d65bd545"></a> 
 <pre>POST /reports HTTP/1.1
@@ -859,17 +888,17 @@ Content-Type: application/reports+json
 }]
 </pre>
    </div>
-   <h2 class="heading settled" data-level="6" id="security"><span class="secno">6. </span><span class="content">Security Considerations</span><a class="self-link" href="#security"></a></h2>
+   <h2 class="heading settled" data-level="7" id="security"><span class="secno">7. </span><span class="content">Security Considerations</span><a class="self-link" href="#security"></a></h2>
    <p>For a discussion of security considerations surrounding out-of-band reporting in
 general, see <a href="https://w3c.github.io/reporting/#security"><cite>Reporting API</cite> § 8 Security Considerations</a>.</p>
    <p>The remainder of this section discusses security considerations for crash
 reporting specifically.</p>
-   <h2 class="heading settled" data-level="7" id="privacy"><span class="secno">7. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
+   <h2 class="heading settled" data-level="8" id="privacy"><span class="secno">8. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
    <p>For a discussion of privacy considerations surrounding out-of-band reporting in
 general, see <a href="https://w3c.github.io/reporting/#privacy"><cite>Reporting API</cite> § 9 Privacy Considerations</a>.</p>
    <p>The remainder of this section discusses privacy considerations for crash
 reporting specifically.</p>
-   <h3 class="heading settled" data-level="7.1" id="cross-process-contamination"><span class="secno">7.1. </span><span class="content">Cross-Process Contamination</span><a class="self-link" href="#cross-process-contamination"></a></h3>
+   <h3 class="heading settled" data-level="8.1" id="cross-process-contamination"><span class="secno">8.1. </span><span class="content">Cross-Process Contamination</span><a class="self-link" href="#cross-process-contamination"></a></h3>
   </main>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
@@ -883,10 +912,31 @@ reporting specifically.</p>
      <li><a href="#dom-crashreportbody-reason">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-reason">dfn for CrashReportBody</a><span>, in § 3</span>
     </ul>
+   <li>
+    stack
+    <ul>
+     <li><a href="#dom-crashreportbody-stack">attribute for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#crashreportbody-stack">dfn for CrashReportBody</a><span>, in § 3</span>
+    </ul>
    <li><a href="#dom-crashreportbody-tojson">toJSON()</a><span>, in § 3</span>
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
+   <li>
+    <a data-link-type="biblio">[DOCUMENT-POLICY]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="ccd8b64e">configuration point</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[DOM]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="a973e0fe">document</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[ERROR STACKS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="84afeaae">error.prototype.stack</span>
+    </ul>
    <li>
     <a data-link-type="biblio">[REPORTING]</a> defines the following terms:
     <ul>
@@ -908,6 +958,10 @@ reporting specifically.</p>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-document-policy">[DOCUMENT-POLICY]
+   <dd><a href="https://wicg.github.io/document-policy/"><cite>Document Policy</cite></a>. cg-draft. URL: <a href="https://wicg.github.io/document-policy/">https://wicg.github.io/document-policy/</a>
+   <dt id="biblio-dom">[DOM]
+   <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-reporting">[REPORTING]
    <dd>Douglas Creager; Ian Clelland; Mike West. <a href="https://w3c.github.io/reporting/"><cite>Reporting API</cite></a>. URL: <a href="https://w3c.github.io/reporting/">https://w3c.github.io/reporting/</a>
    <dt id="biblio-webidl">[WEBIDL]
@@ -918,6 +972,7 @@ reporting specifically.</p>
 <c- b>interface</c-> <a href="#crashreportbody"><code><c- g>CrashReportBody</c-></code></a> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody"><c- n>ReportBody</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object"><c- b>object</c-></a> <a href="#dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></a>();
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-reason"><code><c- g>reason</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-stack"><code><c- g>stack</c-></code></a>;
 };
 
 </pre>
@@ -1123,15 +1178,20 @@ function parseHTML(markup) {
 let dfnPanelData = {
 "188c6617": {"dfnID":"188c6617","dfnText":"ReportBody","external":true,"refSections":[{"refs":[{"id":"ref-for-reportbody"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#reportbody"},
 "4d5cebba": {"dfnID":"4d5cebba","dfnText":"report type","external":true,"refSections":[{"refs":[{"id":"ref-for-report-type"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-type"},
-"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"84afeaae": {"dfnID":"84afeaae","dfnText":"error.prototype.stack","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-get-error.prototype-stack"}],"title":"3. Crash Reports"}],"url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
+"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#endpoint"},
 "9fe8836b": {"dfnID":"9fe8836b","dfnText":"report","external":true,"refSections":[{"refs":[{"id":"ref-for-report"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report"},
+"a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-concept-document\u2460"}],"title":"4. Document Policy Integration"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
+"ccd8b64e": {"dfnID":"ccd8b64e","dfnText":"configuration point","external":true,"refSections":[{"refs":[{"id":"ref-for-configuration-point"}],"title":"4. Document Policy Integration"}],"url":"https://wicg.github.io/document-policy/#configuration-point"},
 "cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
 "crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"}],"url":"#crash-reports"},
 "crashreportbody": {"dfnID":"crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody"}],"title":"3. Crash Reports"}],"url":"#crashreportbody"},
-"crashreportbody-reason": {"dfnID":"crashreportbody-reason","dfnText":"reason","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-reason"},{"id":"ref-for-crashreportbody-reason\u2460"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-reason"},
+"crashreportbody-reason": {"dfnID":"crashreportbody-reason","dfnText":"reason","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-reason"},{"id":"ref-for-crashreportbody-reason\u2460"},{"id":"ref-for-crashreportbody-reason\u2461"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-reason"},
+"crashreportbody-stack": {"dfnID":"crashreportbody-stack","dfnText":"stack","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-stack"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-stack"},
 "dom-crashreportbody-reason": {"dfnID":"dom-crashreportbody-reason","dfnText":"reason","external":false,"refSections":[],"url":"#dom-crashreportbody-reason"},
+"dom-crashreportbody-stack": {"dfnID":"dom-crashreportbody-stack","dfnText":"stack","external":false,"refSections":[],"url":"#dom-crashreportbody-stack"},
 "dom-crashreportbody-tojson": {"dfnID":"dom-crashreportbody-tojson","dfnText":"toJSON","external":false,"refSections":[],"url":"#dom-crashreportbody-tojson"},
 "efd1ec5d": {"dfnID":"efd1ec5d","dfnText":"object","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-object"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-object"},
 "f4531911": {"dfnID":"f4531911","dfnText":"Default","external":true,"refSections":[{"refs":[{"id":"ref-for-Default"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Default"},
@@ -1526,6 +1586,9 @@ let refsData = {
 "#crash-reports": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"crash reports","type":"dfn","url":"#crash-reports"},
 "#crashreportbody": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"CrashReportBody","type":"interface","url":"#crashreportbody"},
 "#crashreportbody-reason": {"export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"reason","type":"dfn","url":"#crashreportbody-reason"},
+"#crashreportbody-stack": {"export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"stack","type":"dfn","url":"#crashreportbody-stack"},
+"https://dom.spec.whatwg.org/#concept-document": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
+"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack": {"export":true,"for_":[],"level":"","normative":true,"shortname":"error stacks","spec":"error stacks","status":"anchor-block","text":"error.prototype.stack","type":"dfn","url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
 "https://w3c.github.io/reporting/#endpoint": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"endpoint","type":"dfn","url":"https://w3c.github.io/reporting/#endpoint"},
 "https://w3c.github.io/reporting/#report": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report","type":"dfn","url":"https://w3c.github.io/reporting/#report"},
 "https://w3c.github.io/reporting/#report-body": {"export":true,"for_":["report"],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"body","type":"dfn","url":"https://w3c.github.io/reporting/#report-body"},
@@ -1535,6 +1598,7 @@ let refsData = {
 "https://webidl.spec.whatwg.org/#Exposed": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#idl-DOMString": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "https://webidl.spec.whatwg.org/#idl-object": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"object","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-object"},
+"https://wicg.github.io/document-policy/#configuration-point": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"document-policy","spec":"document-policy","status":"current","text":"configuration point","type":"dfn","url":"https://wicg.github.io/document-policy/#configuration-point"},
 };
 
 function mkRefHint(link, ref) {
