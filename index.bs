@@ -16,6 +16,10 @@ Boilerplate: omit conformance, omit feedback-header
 Markup Shorthands: css off, markdown on
 Include MDN Panels: no
 </pre>
+<pre class="anchors">
+url: https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack; type: dfn; spec: ERROR STACKS
+  text: Error.prototype.stack
+</pre>
 
 Introduction {#intro}
 ============
@@ -68,11 +72,12 @@ optionally the reason for the crash (such as "oom").
 interface CrashReportBody : ReportBody {
   [Default] object toJSON();
   readonly attribute DOMString? reason;
+  readonly attribute DOMString? stack;
 };
 </xmp>
 
 A [=crash report=]'s [=report/body=], represented in JavaScript by
-{{CrashReportBody}}, contains the following field:
+{{CrashReportBody}}, contains the following fields:
 
 * <dfn for="CrashReportBody">reason</dfn>: A more specific classification of the
   type of crash that occured, if known, or omitted otherwise. The valid
@@ -95,6 +100,18 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
   </tbody>
 </table>
 
+* <dfn for="CrashReportBody">stack</dfn>: The string representation of the
+  JavaScript call stack at the time of the crash, if all of the following are
+  true, or omitted otherwise:
+
+    * The crash [=reason=] is "unresponsive".
+    * The policy value for `include-js-call-stacks-in-crash-reports` in the
+      [=Document=] which crashed is `true`.
+    * The call stack can be recovered from the crashed document.
+
+  The string representation used for [=CrashReportBody/stack=] is the
+  same as that used by the [=Error.prototype.stack=] property.
+
 Note: Crash reports are always delivered to the [=endpoint=] named `default`;
 there is currently no way to override this.  If you want to receive other kinds
 of reports, but not crash reports, make sure to use a different name for the
@@ -105,6 +122,21 @@ receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.
 
+Document Policy Integration {#document-policy}
+===========================
+
+Site authors may opt in to recording the JavaScript call stack with some
+reports.
+
+This spec defines a [=configuration point=] with the name
+`include-js-call-stacks-in-crash-reports`. Its type is boolean, and its default
+value is `false`. When configured as `true` in a [=Document=] for which crash
+reporting is enabled, this will cause a string representation of the JavaScript
+call stack, at the time of the crash, to be included in a crash report.
+
+<div class="example">
+<xmp class="http">Document-Policy: include-js-call-stacks-in-crash-reports</xmp>
+</div>
 
 Implementation Considerations {#implementation}
 =============================
