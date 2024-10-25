@@ -4,9 +4,11 @@
   <title>Crash Reporting</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 6edc88947, updated Thu Aug 17 11:18:09 2023 -0700" name="generator">
+  <meta content="Bikeshed version d765c696b, updated Fri Mar 8 15:58:52 2024 -0800" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="f8b11ecfe2e44554a3f5ed20ff194d9eb9c38731" name="document-revision">
+  <meta content="48e5d94d747090938bf266e8ac70e4fc664fd1c5" name="revision">
+  <meta content="dark light" name="color-scheme">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -78,7 +80,6 @@ pre .property::before, pre .property::after {
 }
 </style>
 <style>/* Boilerplate: style-colors */
-
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
 :root {
     color-scheme: light dark;
@@ -332,11 +333,15 @@ figcaption:not(.no-marker)::before {
 :root {
     --dfnpanel-bg: #ddd;
     --dfnpanel-text: var(--text);
+    --dfnpanel-target-bg: #ffc;
+    --dfnpanel-target-outline: orange;
 }
 @media (prefers-color-scheme: dark) {
     :root {
         --dfnpanel-bg: #222;
         --dfnpanel-text: var(--text);
+        --dfnpanel-target-bg: #333;
+        --dfnpanel-target-outline: silver;
     }
 }
 .dfn-panel {
@@ -359,11 +364,13 @@ figcaption:not(.no-marker)::before {
 .dfn-panel > b { display: block; }
 .dfn-panel a { color: var(--dfnpanel-text); }
 .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel a:focus {
+    outline: 5px auto Highlight;
+    outline: 5px auto -webkit-focus-ring-color;
+}
 .dfn-panel > b + b { margin-top: 0.25em; }
 .dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
 .dfn-panel li a {
-    white-space: pre;
-    display: inline-block;
     max-width: calc(300px - 1.5em - 1em);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -372,67 +379,84 @@ figcaption:not(.no-marker)::before {
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
-    left: .5em;
+    left: 8px;
     bottom: 2em;
     margin: 0 auto;
     max-width: calc(100vw - 1.5em - .4em - .5em);
     max-height: 30vh;
+    transition: left 1s ease-out, bottom 1s ease-out;
 }
 
-.dfn-paneled[role="button"] { cursor: pointer; }
+.dfn-panel .link-item:hover {
+    text-decoration: underline;
+}
+.dfn-panel .link-item .copy-icon {
+    opacity: 0;
+}
+.dfn-panel .link-item:hover .copy-icon,
+.dfn-panel .link-item .copy-icon:focus {
+    opacity: 1;
+}
+
+.dfn-panel .copy-icon {
+    display: inline-block;
+    margin-right: 0.5em;
+    width: 0.85em;
+    height: 1em;
+    border-radius: 3px;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.dfn-panel .copy-icon .icon {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.dfn-panel .copy-icon .icon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    background-color: #ccc;
+    opacity: 0.25;
+    transform: translate(3px, -3px);
+}
+
+.dfn-panel .copy-icon:active .icon::before {
+    opacity: 1;
+}
+
+.dfn-paneled[role="button"] { cursor: help; }
+
+.highlighted {
+    animation: target-fade 3s;
+}
+
+@keyframes target-fade {
+    from {
+        background-color: var(--dfnpanel-target-bg);
+        outline: 5px solid var(--dfnpanel-target-outline);
+    }
+    to {
+        color: var(--a-normal-text);
+        background-color: transparent;
+        outline: transparent;
+    }
+}
 </style>
-<style>/* Boilerplate: style-dfn-panel */
-:root {
-    --dfnpanel-bg: #ddd;
-    --dfnpanel-text: var(--text);
+<style>/* Boilerplate: style-idl-highlighting */
+pre.idl.highlight {
+    background: var(--borderedblock-bg, var(--def-bg));
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --dfnpanel-bg: #222;
-        --dfnpanel-text: var(--text);
-    }
-}
-.dfn-panel {
-    position: absolute;
-    z-index: 35;
-    width: 20em;
-    width: 300px;
-    height: auto;
-    max-height: 500px;
-    overflow: auto;
-    padding: 0.5em 0.75em;
-    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
-    background: var(--dfnpanel-bg);
-    color: var(--dfnpanel-text);
-    border: outset 0.2em;
-    white-space: normal; /* in case it's moved into a pre */
-}
-.dfn-panel:not(.on) { display: none; }
-.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
-.dfn-panel > b { display: block; }
-.dfn-panel a { color: var(--dfnpanel-text); }
-.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
-.dfn-panel > b + b { margin-top: 0.25em; }
-.dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
-.dfn-panel li a {
-    white-space: pre;
-    display: inline-block;
-    max-width: calc(300px - 1.5em - 1em);
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.dfn-panel.activated {
-    display: inline-block;
-    position: fixed;
-    left: .5em;
-    bottom: 2em;
-    margin: 0 auto;
-    max-width: calc(100vw - 1.5em - .4em - .5em);
-    max-height: 30vh;
-}
-
-.dfn-paneled[role="button"] { cursor: pointer; }
 </style>
 <style>/* Boilerplate: style-issues */
 a[href].issue-return {
@@ -453,8 +477,40 @@ a[href].issue-return {
     margin-bottom: 0;
 }
 </style>
-<style>/* Boilerplate: style-selflinks */
+<style>/* Boilerplate: style-ref-hints */
+:root {
+    --ref-hint-bg: #ddd;
+    --ref-hint-text: var(--text);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ref-hint-bg: #222;
+        --ref-hint-text: var(--text);
+    }
+}
 
+.ref-hint {
+    display: inline-block;
+    position: absolute;
+    z-index: 35;
+    width: 20em;
+    width: 300px;
+    height: auto;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.5em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--ref-hint-bg);
+    color: var(--ref-hint-text);
+    border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
+}
+
+.ref-hint * { margin: 0; padding: 0; text-indent: 0; }
+
+.ref-hint ul { padding: 0 0 0 1em; list-style: none; }
+</style>
+<style>/* Boilerplate: style-selflinks */
 :root {
     --selflink-text: white;
     --selflink-bg: gray;
@@ -514,14 +570,6 @@ a.self-link::before            { content: "¶"; }
 dfn > a.self-link::before      { content: "#"; }
 </style>
 <style>/* Boilerplate: style-syntax-highlighting */
-
-            pre.idl.highlight {
-                background: var(--borderedblock-bg, var(--def-bg));
-            }
-            
-</style>
-<style>/* Boilerplate: style-syntax-highlighting */
-
 code.highlight { padding: .1em; border-radius: .3em; }
 pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
 
@@ -578,7 +626,6 @@ c-[vc] { color: #0077aa } /* Name.Variable.Class */
 c-[vg] { color: #0077aa } /* Name.Variable.Global */
 c-[vi] { color: #0077aa } /* Name.Variable.Instance */
 c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
-
 
 @media (prefers-color-scheme: dark) {
     .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
@@ -655,14 +702,14 @@ D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
 5 = lab(85,-10,-50)
 6 = lab(85,35,-15)
 */
-var { cursor: pointer; }
-var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
-var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
-var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
-var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
-var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
-var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
-var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
+[data-algorithm] var { cursor: pointer; }
+var[data-var-color="0"] { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
+var[data-var-color="1"] { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
+var[data-var-color="2"] { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
+var[data-var-color="3"] { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
+var[data-var-color="4"] { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
+var[data-var-color="5"] { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
+var[data-var-color="6"] { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
 </style>
  <body class="h-entry">
   <div class="head">
@@ -689,8 +736,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>This document defines mechanism for reporing browser crashes to site owners
-
-  through the use of the Reporting API.</p>
+through the use of the Reporting API.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
@@ -720,23 +766,24 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#concept-unresponsive"><span class="secno">2.3</span> <span class="content">Unresponsive</span></a>
      </ol>
     <li><a href="#crash-report"><span class="secno">3</span> <span class="content">Crash Reports</span></a>
+    <li><a href="#document-policy"><span class="secno">4</span> <span class="content">Document Policy Integration</span></a>
     <li>
-     <a href="#processing"><span class="secno">4</span> <span class="content">Processing Model</span></a>
+     <a href="#processing"><span class="secno">5</span> <span class="content">Processing Model</span></a>
      <ol class="toc">
-      <li><a href="#registration"><span class="secno">4.1</span> <span class="content">Registering Crash Reports</span></a>
-      <li><a href="#processing-crash"><span class="secno">4.2</span> <span class="content">Processing Crashes</span></a>
+      <li><a href="#registration"><span class="secno">5.1</span> <span class="content">Registering Crash Reports</span></a>
+      <li><a href="#processing-crash"><span class="secno">5.2</span> <span class="content">Processing Crashes</span></a>
      </ol>
     <li>
-     <a href="#implementation"><span class="secno">5</span> <span class="content">Implementation Considerations</span></a>
+     <a href="#implementation"><span class="secno">6</span> <span class="content">Implementation Considerations</span></a>
      <ol class="toc">
-      <li><a href="#delivery"><span class="secno">5.1</span> <span class="content">Delivery</span></a>
+      <li><a href="#delivery"><span class="secno">6.1</span> <span class="content">Delivery</span></a>
      </ol>
-    <li><a href="#sample-reports"><span class="secno">6</span> <span class="content">Sample Reports</span></a>
-    <li><a href="#security"><span class="secno">7</span> <span class="content">Security Considerations</span></a>
+    <li><a href="#sample-reports"><span class="secno">7</span> <span class="content">Sample Reports</span></a>
+    <li><a href="#security"><span class="secno">8</span> <span class="content">Security Considerations</span></a>
     <li>
-     <a href="#privacy"><span class="secno">8</span> <span class="content">Privacy Considerations</span></a>
+     <a href="#privacy"><span class="secno">9</span> <span class="content">Privacy Considerations</span></a>
      <ol class="toc">
-      <li><a href="#cross-process-contamination"><span class="secno">8.1</span> <span class="content">Cross-Process Contamination</span></a>
+      <li><a href="#cross-process-contamination"><span class="secno">9.1</span> <span class="content">Cross-Process Contamination</span></a>
      </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -790,11 +837,12 @@ and optionally the reason for the <a data-link-type="dfn" href="#crash" id="ref-
    <p><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports①">Crash reports</a> have the <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-type" id="ref-for-report-type">report type</a> "crash".</p>
 <pre class="idl exclude highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="crashreportbody"><code><c- g>CrashReportBody</c-></code></dfn> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody" id="ref-for-reportbody"><c- n>ReportBody</c-></a> {
-  [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default" id="ref-for-Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object"><c- b>object</c-></a> <dfn class="idl-code" data-dfn-for="CrashReportBody" data-dfn-type="method" data-export data-lt="toJSON()" id="dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code><a class="self-link" href="#dom-crashreportbody-tojson"></a></dfn>();
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>? <dfn class="idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code><a class="self-link" href="#dom-crashreportbody-reason"></a></dfn>;
+  [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default" id="ref-for-Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object"><c- b>object</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="method" data-export data-lt="toJSON()" id="dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></dfn>();
+  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-stack"><code><c- g>stack</c-></code></dfn>;
 };
 </pre>
-   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following field:</p>
+   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
@@ -812,6 +860,22 @@ type of crash that occured, if known, or omitted otherwise. The valid <a data-li
       <td>unresponsive
       <td>The page was killed due to being unresponsive.
    </table>
+   <ul>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-stack">stack</dfn>: The string representation of the
+JavaScript call stack at the time of the crash, if all of the following are
+true, or omitted otherwise:</p>
+     <ul>
+      <li data-md>
+       <p>The crash <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason②">reason</a> is "unresponsive".</p>
+      <li data-md>
+       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">Document</a> which crashed is <code>true</code>.</p>
+      <li data-md>
+       <p>The call stack can be recovered from the crashed document.</p>
+     </ul>
+     <p>The string representation used for <a data-link-type="dfn" href="#crashreportbody-stack" id="ref-for-crashreportbody-stack">stack</a> is the
+same as that used by the <a data-link-type="dfn" href="https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack" id="ref-for-sec-get-error.prototype-stack">Error.prototype.stack</a> property.</p>
+   </ul>
    <p class="note" role="note"><span class="marker">Note:</span> Crash reports are always delivered to the <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> named <code>default</code>;
 there is currently no way to override this.  If you want to receive other kinds
 of reports, but not crash reports, make sure to use a different name for the
@@ -820,16 +884,27 @@ endpoint that you choose for those reports.</p>
 receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.</p>
-   <h2 class="heading settled" data-level="4" id="processing"><span class="secno">4. </span><span class="content">Processing Model</span><a class="self-link" href="#processing"></a></h2>
+   <h2 class="heading settled" data-level="4" id="document-policy"><span class="secno">4. </span><span class="content">Document Policy Integration</span><a class="self-link" href="#document-policy"></a></h2>
+   <p>Site authors may opt in to recording the JavaScript call stack with some
+reports.</p>
+   <p>This spec defines a <a data-link-type="dfn" href="https://wicg.github.io/document-policy/#configuration-point" id="ref-for-configuration-point">configuration point</a> with the name <code>include-js-call-stacks-in-crash-reports</code>. Its type is boolean, and its default
+value is <code>false</code>. When configured as <code>true</code> in a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document②">Document</a> for which crash
+reporting is enabled, this will cause a string representation of the JavaScript
+call stack, at the time of the crash, to be included in a crash report.</p>
+   <div class="example" id="example-565177e8">
+    <a class="self-link" href="#example-565177e8"></a> 
+<pre class="http">Document-Policy: include-js-call-stacks-in-crash-reports</pre>
+   </div>
+   <h2 class="heading settled" data-level="5" id="processing"><span class="secno">5. </span><span class="content">Processing Model</span><a class="self-link" href="#processing"></a></h2>
    <p class="note" role="note"><span class="marker">Note:</span> Browser architectures vary, and is it possible that a browser exists which
 cannot support this specification as written due to its architecture.</p>
    <p>This processing model makes certain assumptions about the underlying process
 architecture. Namely:</p>
    <ul>
     <li data-md>
-     <p>Each <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">Document</a> is controlled by a single process, such that if that process
- crashes, the controlled <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document②">Document</a> will immediately and abruptly terminate.</p>
-     <p class="note" role="note"><span class="marker">Note:</span> It is not required that all such <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document③">Documents</a> are related to each
+     <p>Each <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document③">Document</a> is controlled by a single process, such that if that process
+ crashes, the controlled <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document④">Document</a> will immediately and abruptly terminate.</p>
+     <p class="note" role="note"><span class="marker">Note:</span> It is not required that all such <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑤">Documents</a> are related to each
  other in any way other than being controlled by the same process.</p>
     <li data-md>
      <p>A separate <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="coordinator-process">coordinator process</dfn> exists which is responsible for
@@ -837,7 +912,7 @@ architecture. Namely:</p>
  survive even when those processes crash. This process is able to observe the
  document process crash.</p>
     <li data-md>
-     <p>The coordinator process maintains enough information about the state of each <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document④">Document</a> that after a process crash, it can reconstruct the frame tree
+     <p>The coordinator process maintains enough information about the state of each <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑥">Document</a> that after a process crash, it can reconstruct the frame tree
  that existed in each of that process' documents before the crash occurred.</p>
    </ul>
    <p>If these assumptions do not hold for a particular user agent, then this
@@ -847,26 +922,26 @@ documents and processes. The following are all possible arrangments which this
 processing model is intended to support:</p>
    <ul>
     <li data-md>
-     <p>A process may control multiple <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑤">Documents</a>. These <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑥">Documents</a> may be part
+     <p>A process may control multiple <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑦">Documents</a>. These <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑧">Documents</a> may be part
  of the same page, or may reside in different pages. They may be <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable">top-level
  traversables</a> or <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable" id="ref-for-child-navigable">child navigables</a>.</p>
     <li data-md>
-     <p>A process may control <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑦">Documents</a> which are cross-site or cross-origin to
+     <p>A process may control <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑨">Documents</a> which are cross-site or cross-origin to
  each other.</p>
     <li data-md>
-     <p>A <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑧">Document</a> in a process which has crashed may have contained child
+     <p>A <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①⓪">Document</a> in a process which has crashed may have contained child
  documents in processes which have not crashed</p>
     <li data-md>
-     <p>Similarly, a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document⑨">Document</a> in a process which has crashed may be contained
+     <p>Similarly, a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①①">Document</a> in a process which has crashed may be contained
  within a parent document in a process which has not crashed.</p>
    </ul>
-   <h3 class="heading settled" data-level="4.1" id="registration"><span class="secno">4.1. </span><span class="content">Registering Crash Reports</span><a class="self-link" href="#registration"></a></h3>
-   <p>The <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process">coordinator process</a> has an <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="endpoint-map">endpoint map</dfn>, which is a map of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①⓪">Documents</a> -> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints" id="ref-for-windoworworkerglobalscope-endpoints">endpoints</a>, initially empty.</p>
+   <h3 class="heading settled" data-level="5.1" id="registration"><span class="secno">5.1. </span><span class="content">Registering Crash Reports</span><a class="self-link" href="#registration"></a></h3>
+   <p>The <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process">coordinator process</a> has an <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="endpoint-map">endpoint map</dfn>, which is a map of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①②">Documents</a> -> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints" id="ref-for-windoworworkerglobalscope-endpoints">endpoints</a>, initially empty.</p>
    <p>The <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process①">coordinator process</a> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-map">process map</dfn>, which is a map of
-process -> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">lists</a> of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①①">Documents</a>.</p>
+process -> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">lists</a> of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①③">Documents</a>.</p>
    <p class="note" role="note"><span class="marker">Note:</span> The maintenance of the <a data-link-type="dfn" href="#process-map" id="ref-for-process-map">process map</a> is out of scope for this
 specification. It is intended that the user agent track, for every process it
-creates for controlling <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①②">Documents</a>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①">list</a> of which <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①③">Documents</a> are
+creates for controlling <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①④">Documents</a>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①">list</a> of which <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①⑤">Documents</a> are
 controlled by that process.</p>
    <p>When a <var>document</var> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#initialize-a-globals-endpoint-list" id="ref-for-initialize-a-globals-endpoint-list">initializes its endpoint
 list</a>, it should run the following step:</p>
@@ -875,7 +950,7 @@ list</a>, it should run the following step:</p>
      <p>If <var>document</var>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints" id="ref-for-windoworworkerglobalscope-endpoints①">endpoints</a> contains <code>"default"</code>, then set <a data-link-type="dfn" href="#endpoint-map" id="ref-for-endpoint-map">endpoint map</a>[<var>document</var>] to <var>document</var>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints" id="ref-for-windoworworkerglobalscope-endpoints②">endpoints</a>["default"].</p>
    </ol>
    <p>When a document is destroyed, remove it from the map.</p>
-   <h3 class="heading settled" data-level="4.2" id="processing-crash"><span class="secno">4.2. </span><span class="content">Processing Crashes</span><a class="self-link" href="#processing-crash"></a></h3>
+   <h3 class="heading settled" data-level="5.2" id="processing-crash"><span class="secno">5.2. </span><span class="content">Processing Crashes</span><a class="self-link" href="#processing-crash"></a></h3>
    <div class="algorithm" data-algorithm="process-crash">
      Given a crashed process <var>process</var>, with a string <var>reason</var>, this algorithm sends
 crash reports to the appropriate endpoints: 
@@ -901,7 +976,7 @@ crash reports to the appropriate endpoints:
         <p>Let <var>body</var> be a new <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody①">CrashReportBody</a></code>, initialized
   as follows:</p>
         <dl>
-         <dt data-md><a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason②">reason</a>
+         <dt data-md><a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason③">reason</a>
          <dd data-md>
           <p><var>reason</var></p>
         </dl>
@@ -910,15 +985,15 @@ crash reports to the appropriate endpoints:
       </ol>
     </ol>
    </div>
-   <p>If a process controlling <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①④">Documents</a> crashes due to an <a data-link-type="dfn" href="#out-of-memory-condition" id="ref-for-out-of-memory-condition">out-of-memory condition</a>, the <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process②">coordinator process</a> should process a crash
+   <p>If a process controlling <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①⑥">Documents</a> crashes due to an <a data-link-type="dfn" href="#out-of-memory-condition" id="ref-for-out-of-memory-condition">out-of-memory condition</a>, the <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process②">coordinator process</a> should process a crash
 for <var>process</var> with the reason string "oom".</p>
    <p>If the user agent destroyes a process due to an <a data-link-type="dfn" href="#unresponsive-condition" id="ref-for-unresponsive-condition">unresponsive condition</a>, the <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process③">coordinator process</a> should process a crash for <var>process</var> with the reason
 string "unresponsive".</p>
    <p>If the <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process④">coordinator process</a> observes a <a data-link-type="dfn" href="#crash" id="ref-for-crash⑤">crash</a> in a process which was not
 due to an <a data-link-type="dfn" href="#out-of-memory-condition" id="ref-for-out-of-memory-condition①">out-of-memory condition</a> or an <a data-link-type="dfn" href="#unresponsive-condition" id="ref-for-unresponsive-condition①">unresponsive condition</a>, then the <a data-link-type="dfn" href="#coordinator-process" id="ref-for-coordinator-process⑤">coordinator process</a> should process a crash for <var>process</var> with the reason
 string "".</p>
-   <h2 class="heading settled" data-level="5" id="implementation"><span class="secno">5. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
-   <h3 class="heading settled" data-level="5.1" id="delivery"><span class="secno">5.1. </span><span class="content">Delivery</span><a class="self-link" href="#delivery"></a></h3>
+   <h2 class="heading settled" data-level="6" id="implementation"><span class="secno">6. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
+   <h3 class="heading settled" data-level="6.1" id="delivery"><span class="secno">6.1. </span><span class="content">Delivery</span><a class="self-link" href="#delivery"></a></h3>
    <p><a data-link-type="biblio" href="#biblio-reporting" title="Reporting API">[REPORTING]</a>, which defines the framework on which this specification depends,
 provides at most a best-efforts delivery mechanism. This is especially true when
 it comes to reporting crashes. There are probably always going to be certain
@@ -931,7 +1006,7 @@ responsible for that document crashes, or is terminated by the operating system.
    <p>There are multiple ways to implement such a monitor, with varying levels of
 reliability and robustness to specific crash causes, and this specification does
 not attempt to prescribe any particular such method.</p>
-   <h2 class="heading settled" data-level="6" id="sample-reports"><span class="secno">6. </span><span class="content">Sample Reports</span><a class="self-link" href="#sample-reports"></a></h2>
+   <h2 class="heading settled" data-level="7" id="sample-reports"><span class="secno">7. </span><span class="content">Sample Reports</span><a class="self-link" href="#sample-reports"></a></h2>
    <div class="example" id="example-d65bd545">
     <a class="self-link" href="#example-d65bd545"></a> 
 <pre>POST /reports HTTP/1.1
@@ -950,34 +1025,40 @@ Content-Type: application/reports+json
 }]
 </pre>
    </div>
-   <h2 class="heading settled" data-level="7" id="security"><span class="secno">7. </span><span class="content">Security Considerations</span><a class="self-link" href="#security"></a></h2>
+   <h2 class="heading settled" data-level="8" id="security"><span class="secno">8. </span><span class="content">Security Considerations</span><a class="self-link" href="#security"></a></h2>
    <p>For a discussion of security considerations surrounding out-of-band reporting in
 general, see <a href="https://w3c.github.io/reporting/#security"><cite>Reporting API</cite> § 8 Security Considerations</a>.</p>
    <p>The remainder of this section discusses security considerations for crash
 reporting specifically.</p>
-   <h2 class="heading settled" data-level="8" id="privacy"><span class="secno">8. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
+   <h2 class="heading settled" data-level="9" id="privacy"><span class="secno">9. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
    <p>For a discussion of privacy considerations surrounding out-of-band reporting in
 general, see <a href="https://w3c.github.io/reporting/#privacy"><cite>Reporting API</cite> § 9 Privacy Considerations</a>.</p>
    <p>The remainder of this section discusses privacy considerations for crash
 reporting specifically.</p>
-   <h3 class="heading settled" data-level="8.1" id="cross-process-contamination"><span class="secno">8.1. </span><span class="content">Cross-Process Contamination</span><a class="self-link" href="#cross-process-contamination"></a></h3>
+   <h3 class="heading settled" data-level="9.1" id="cross-process-contamination"><span class="secno">9.1. </span><span class="content">Cross-Process Contamination</span><a class="self-link" href="#cross-process-contamination"></a></h3>
   </main>
-<script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
+  <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#coordinator-process">coordinator process</a><span>, in § 4</span>
+   <li><a href="#coordinator-process">coordinator process</a><span>, in § 5</span>
    <li><a href="#crash">crash</a><span>, in § 2.1</span>
    <li><a href="#crashreportbody">CrashReportBody</a><span>, in § 3</span>
    <li><a href="#crash-reports">Crash reports</a><span>, in § 3</span>
-   <li><a href="#endpoint-map">endpoint map</a><span>, in § 4.1</span>
+   <li><a href="#endpoint-map">endpoint map</a><span>, in § 5.1</span>
    <li><a href="#out-of-memory-condition">out-of-memory condition</a><span>, in § 2.2</span>
-   <li><a href="#process-map">process map</a><span>, in § 4.1</span>
+   <li><a href="#process-map">process map</a><span>, in § 5.1</span>
    <li>
     reason
     <ul>
      <li><a href="#dom-crashreportbody-reason">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-reason">dfn for CrashReportBody</a><span>, in § 3</span>
+    </ul>
+   <li>
+    stack
+    <ul>
+     <li><a href="#dom-crashreportbody-stack">attribute for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#crashreportbody-stack">dfn for CrashReportBody</a><span>, in § 3</span>
     </ul>
    <li><a href="#dom-crashreportbody-tojson">toJSON()</a><span>, in § 3</span>
    <li><a href="#unresponsive-condition">unresponsive condition</a><span>, in § 2.3</span>
@@ -985,9 +1066,19 @@ reporting specifically.</p>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
+    <a data-link-type="biblio">[DOCUMENT-POLICY]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="ccd8b64e">configuration point</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="a973e0fe">document</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[ERROR STACKS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="84afeaae">error.prototype.stack</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
@@ -1027,6 +1118,8 @@ reporting specifically.</p>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-document-policy">[DOCUMENT-POLICY]
+   <dd><a href="https://wicg.github.io/document-policy/"><cite>Document Policy</cite></a>. cg-draft. URL: <a href="https://wicg.github.io/document-policy/">https://wicg.github.io/document-policy/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]
@@ -1043,347 +1136,12 @@ reporting specifically.</p>
 <c- b>interface</c-> <a href="#crashreportbody"><code><c- g>CrashReportBody</c-></code></a> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody"><c- n>ReportBody</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object"><c- b>object</c-></a> <a href="#dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></a>();
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-reason"><code><c- g>reason</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-stack"><code><c- g>stack</c-></code></a>;
 };
 
 </pre>
-<script>/* Boilerplate: script-dfn-panel */
-"use strict";
-{
-    const dfnsJson = window.dfnsJson || {};
-
-    function genDfnPanel({dfnID, url, dfnText, refSections, external}) {
-        return mk.aside({
-            class: "dfn-panel",
-            id: `infopanel-for-${dfnID}`,
-            "data-for": dfnID,
-            "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
-            },
-            mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
-                `Info about the '${dfnText}' ${external?"external":""} reference.`),
-            mk.a({href:url}, url),
-            mk.b({}, "Referenced in:"),
-            mk.ul({},
-                ...refSections.map(section=>
-                    mk.li({},
-                        ...section.refs.map((ref, refI)=>
-                            [
-                                mk.a({
-                                    href: `#${ref.id}`
-                                    },
-                                    (refI == 0) ? section.title : `(${refI + 1})`
-                                ),
-                                " ",
-                            ]
-                        ),
-                    ),
-                ),
-            ),
-        );
-    }
-
-    function genAllDfnPanels() {
-        for(const panelData of Object.values(window.dfnpanelData)) {
-            const dfnID = panelData.dfnID;
-            const dfn = document.getElementById(dfnID);
-            if(!dfn) {
-                console.log(`Can't find dfn#${dfnID}.`, panelData);
-            } else {
-                const panel = genDfnPanel(panelData);
-                append(document.body, panel);
-                insertDfnPopupAction(dfn, panel)
-            }
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-        genAllDfnPanels();
-
-        // Add popup behavior to all dfns to show the corresponding dfn-panel.
-        var dfns = queryAll('.dfn-paneled');
-        for(let dfn of dfns) { ; }
-
-        document.body.addEventListener("click", (e) => {
-            // If not handled already, just hide all dfn panels.
-            hideAllDfnPanels();
-        });
-    })
-
-
-    function hideAllDfnPanels() {
-        // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
-    }
-
-    function showDfnPanel(dfnPanel, dfn) {
-        hideAllDfnPanels(); // Only display one at this time.
-        dfn.setAttribute("aria-expanded", "true");
-        dfnPanel.classList.add("on");
-        dfnPanel.style.left = "5px";
-        dfnPanel.style.top = "0px";
-        const panelRect = dfnPanel.getBoundingClientRect();
-        const panelWidth = panelRect.right - panelRect.left;
-        if (panelRect.right > document.body.scrollWidth) {
-            // Panel's overflowing the screen.
-            // Just drop it below the dfn and flip it rightward instead.
-            // This still wont' fix things if the screen is *really* wide,
-            // but fixing that's a lot harder without 'anchor()'.
-            dfnPanel.style.top = "1.5em";
-            dfnPanel.style.left = "auto";
-            dfnPanel.style.right = "0px";
-        }
-    }
-
-    function pinDfnPanel(dfnPanel) {
-        // Switch it to "activated" state, which pins it.
-        dfnPanel.classList.add("activated");
-        dfnPanel.style.left = null;
-        dfnPanel.style.top = null;
-    }
-
-    function hideDfnPanel(dfnPanel, dfn) {
-        if(!dfn) {
-            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
-        }
-        dfn.setAttribute("aria-expanded", "false")
-        dfnPanel.classList.remove("on");
-        dfnPanel.classList.remove("activated");
-    }
-
-    function toggleDfnPanel(dfnPanel, dfn) {
-        if(dfnPanel.classList.contains("on")) {
-            hideDfnPanel(dfnPanel, dfn);
-        } else {
-            showDfnPanel(dfnPanel, dfn);
-        }
-    }
-
-    function insertDfnPopupAction(dfn, dfnPanel) {
-        // Find dfn panel
-        const panelWrapper = document.createElement('span');
-        panelWrapper.appendChild(dfnPanel);
-        panelWrapper.style.position = "relative";
-        panelWrapper.style.height = "0px";
-        dfn.insertAdjacentElement("afterend", panelWrapper);
-        dfn.setAttribute('role', 'button');
-        dfn.setAttribute('aria-expanded', 'false')
-        dfn.tabIndex = 0;
-        dfn.classList.add('has-dfn-panel');
-        dfn.addEventListener('click', (event) => {
-            showDfnPanel(dfnPanel, dfn);
-            event.stopPropagation();
-        });
-        dfn.addEventListener('keypress', (event) => {
-            const kc = event.keyCode;
-            // 32->Space, 13->Enter
-            if(kc == 32 || kc == 13) {
-                toggleDfnPanel(dfnPanel, dfn);
-                event.stopPropagation();
-                event.preventDefault();
-            }
-        });
-
-        dfnPanel.addEventListener('click', (event) => {
-            if (event.target.nodeName == 'A') {
-                pinDfnPanel(dfnPanel);
-            }
-            event.stopPropagation();
-        });
-
-        dfnPanel.addEventListener('keydown', (event) => {
-            if(event.keyCode == 27) { // Escape key
-                hideDfnPanel(dfnPanel, dfn);
-                event.stopPropagation();
-                event.preventDefault();
-            }
-        })
-    }
-}
-</script>
-<script>/* Boilerplate: script-dfn-panel */
-"use strict";
-{
-    const dfnsJson = window.dfnsJson || {};
-
-    function genDfnPanel({dfnID, url, dfnText, refSections, external}) {
-        return mk.aside({
-            class: "dfn-panel",
-            id: `infopanel-for-${dfnID}`,
-            "data-for": dfnID,
-            "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
-            },
-            mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
-                `Info about the '${dfnText}' ${external?"external":""} reference.`),
-            mk.a({href:url}, url),
-            mk.b({}, "Referenced in:"),
-            mk.ul({},
-                ...refSections.map(section=>
-                    mk.li({},
-                        ...section.refs.map((ref, refI)=>
-                            [
-                                mk.a({
-                                    href: `#${ref.id}`
-                                    },
-                                    (refI == 0) ? section.title : `(${refI + 1})`
-                                ),
-                                " ",
-                            ]
-                        ),
-                    ),
-                ),
-            ),
-        );
-    }
-
-    function genAllDfnPanels() {
-        for(const panelData of Object.values(window.dfnpanelData)) {
-            const dfnID = panelData.dfnID;
-            const dfn = document.getElementById(dfnID);
-            if(!dfn) {
-                console.log(`Can't find dfn#${dfnID}.`, panelData);
-            } else {
-                const panel = genDfnPanel(panelData);
-                append(document.body, panel);
-                insertDfnPopupAction(dfn, panel)
-            }
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-        genAllDfnPanels();
-
-        // Add popup behavior to all dfns to show the corresponding dfn-panel.
-        var dfns = queryAll('.dfn-paneled');
-        for(let dfn of dfns) { ; }
-
-        document.body.addEventListener("click", (e) => {
-            // If not handled already, just hide all dfn panels.
-            hideAllDfnPanels();
-        });
-    })
-
-
-    function hideAllDfnPanels() {
-        // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
-    }
-
-    function showDfnPanel(dfnPanel, dfn) {
-        hideAllDfnPanels(); // Only display one at this time.
-        dfn.setAttribute("aria-expanded", "true");
-        dfnPanel.classList.add("on");
-        dfnPanel.style.left = "5px";
-        dfnPanel.style.top = "0px";
-        const panelRect = dfnPanel.getBoundingClientRect();
-        const panelWidth = panelRect.right - panelRect.left;
-        if (panelRect.right > document.body.scrollWidth) {
-            // Panel's overflowing the screen.
-            // Just drop it below the dfn and flip it rightward instead.
-            // This still wont' fix things if the screen is *really* wide,
-            // but fixing that's a lot harder without 'anchor()'.
-            dfnPanel.style.top = "1.5em";
-            dfnPanel.style.left = "auto";
-            dfnPanel.style.right = "0px";
-        }
-    }
-
-    function pinDfnPanel(dfnPanel) {
-        // Switch it to "activated" state, which pins it.
-        dfnPanel.classList.add("activated");
-        dfnPanel.style.left = null;
-        dfnPanel.style.top = null;
-    }
-
-    function hideDfnPanel(dfnPanel, dfn) {
-        if(!dfn) {
-            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
-        }
-        dfn.setAttribute("aria-expanded", "false")
-        dfnPanel.classList.remove("on");
-        dfnPanel.classList.remove("activated");
-    }
-
-    function toggleDfnPanel(dfnPanel, dfn) {
-        if(dfnPanel.classList.contains("on")) {
-            hideDfnPanel(dfnPanel, dfn);
-        } else {
-            showDfnPanel(dfnPanel, dfn);
-        }
-    }
-
-    function insertDfnPopupAction(dfn, dfnPanel) {
-        // Find dfn panel
-        const panelWrapper = document.createElement('span');
-        panelWrapper.appendChild(dfnPanel);
-        panelWrapper.style.position = "relative";
-        panelWrapper.style.height = "0px";
-        dfn.insertAdjacentElement("afterend", panelWrapper);
-        dfn.setAttribute('role', 'button');
-        dfn.setAttribute('aria-expanded', 'false')
-        dfn.tabIndex = 0;
-        dfn.classList.add('has-dfn-panel');
-        dfn.addEventListener('click', (event) => {
-            showDfnPanel(dfnPanel, dfn);
-            event.stopPropagation();
-        });
-        dfn.addEventListener('keypress', (event) => {
-            const kc = event.keyCode;
-            // 32->Space, 13->Enter
-            if(kc == 32 || kc == 13) {
-                toggleDfnPanel(dfnPanel, dfn);
-                event.stopPropagation();
-                event.preventDefault();
-            }
-        });
-
-        dfnPanel.addEventListener('click', (event) => {
-            if (event.target.nodeName == 'A') {
-                pinDfnPanel(dfnPanel);
-            }
-            event.stopPropagation();
-        });
-
-        dfnPanel.addEventListener('keydown', (event) => {
-            if(event.keyCode == 27) { // Escape key
-                hideDfnPanel(dfnPanel, dfn);
-                event.stopPropagation();
-                event.preventDefault();
-            }
-        })
-    }
-}
-</script>
-<script>/* Boilerplate: script-dfn-panel-json */
-window.dfnpanelData = {};
-window.dfnpanelData['a973e0fe'] = {"dfnID": "a973e0fe", "url": "https://dom.spec.whatwg.org/#concept-document", "dfnText": "document", "refSections": [{"refs": [{"id": "ref-for-concept-document"}], "title": "2.1. Crash"}, {"refs": [{"id": "ref-for-concept-document\u2460"}, {"id": "ref-for-concept-document\u2461"}, {"id": "ref-for-concept-document\u2462"}, {"id": "ref-for-concept-document\u2463"}, {"id": "ref-for-concept-document\u2464"}, {"id": "ref-for-concept-document\u2465"}, {"id": "ref-for-concept-document\u2466"}, {"id": "ref-for-concept-document\u2467"}, {"id": "ref-for-concept-document\u2468"}], "title": "4. Processing Model"}, {"refs": [{"id": "ref-for-concept-document\u2460\u24ea"}, {"id": "ref-for-concept-document\u2460\u2460"}, {"id": "ref-for-concept-document\u2460\u2461"}, {"id": "ref-for-concept-document\u2460\u2462"}], "title": "4.1. Registering Crash Reports"}, {"refs": [{"id": "ref-for-concept-document\u2460\u2463"}], "title": "4.2. Processing Crashes"}], "external": true};
-window.dfnpanelData['35972864'] = {"dfnID": "35972864", "url": "https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document", "dfnText": "active document", "refSections": [{"refs": [{"id": "ref-for-nav-document"}], "title": "4.2. Processing Crashes"}], "external": true};
-window.dfnpanelData['f23dc013'] = {"dfnID": "f23dc013", "url": "https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable", "dfnText": "child navigable", "refSections": [{"refs": [{"id": "ref-for-child-navigable"}], "title": "4. Processing Model"}], "external": true};
-window.dfnpanelData['13dd6cae'] = {"dfnID": "13dd6cae", "url": "https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable", "dfnText": "node navigable", "refSections": [{"refs": [{"id": "ref-for-node-navigable"}], "title": "4.2. Processing Crashes"}], "external": true};
-window.dfnpanelData['1bba3db7'] = {"dfnID": "1bba3db7", "url": "https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent", "dfnText": "parent", "refSections": [{"refs": [{"id": "ref-for-nav-parent"}], "title": "4.2. Processing Crashes"}], "external": true};
-window.dfnpanelData['bd736ec6'] = {"dfnID": "bd736ec6", "url": "https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable", "dfnText": "top-level traversable", "refSections": [{"refs": [{"id": "ref-for-top-level-traversable"}], "title": "4. Processing Model"}], "external": true};
-window.dfnpanelData['649608b9'] = {"dfnID": "649608b9", "url": "https://infra.spec.whatwg.org/#list", "dfnText": "list", "refSections": [{"refs": [{"id": "ref-for-list"}, {"id": "ref-for-list\u2460"}], "title": "4.1. Registering Crash Reports"}], "external": true};
-window.dfnpanelData['188c6617'] = {"dfnID": "188c6617", "url": "https://w3c.github.io/reporting/#reportbody", "dfnText": "ReportBody", "refSections": [{"refs": [{"id": "ref-for-reportbody"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['cf363990'] = {"dfnID": "cf363990", "url": "https://w3c.github.io/reporting/#report-body", "dfnText": "body", "refSections": [{"refs": [{"id": "ref-for-report-body"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['9239678f'] = {"dfnID": "9239678f", "url": "https://w3c.github.io/reporting/#endpoint", "dfnText": "endpoint", "refSections": [{"refs": [{"id": "ref-for-endpoint"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['e36ea13c'] = {"dfnID": "e36ea13c", "url": "https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints", "dfnText": "endpoints", "refSections": [{"refs": [{"id": "ref-for-windoworworkerglobalscope-endpoints"}, {"id": "ref-for-windoworworkerglobalscope-endpoints\u2460"}, {"id": "ref-for-windoworworkerglobalscope-endpoints\u2461"}], "title": "4.1. Registering Crash Reports"}], "external": true};
-window.dfnpanelData['7ed9d314'] = {"dfnID": "7ed9d314", "url": "https://w3c.github.io/reporting/#generate-and-queue-a-report", "dfnText": "generate and queue a report", "refSections": [{"refs": [{"id": "ref-for-generate-and-queue-a-report"}], "title": "4.2. Processing Crashes"}], "external": true};
-window.dfnpanelData['4368d1e1'] = {"dfnID": "4368d1e1", "url": "https://w3c.github.io/reporting/#initialize-a-globals-endpoint-list", "dfnText": "initialize a global's endpoint list", "refSections": [{"refs": [{"id": "ref-for-initialize-a-globals-endpoint-list"}], "title": "4.1. Registering Crash Reports"}], "external": true};
-window.dfnpanelData['9fe8836b'] = {"dfnID": "9fe8836b", "url": "https://w3c.github.io/reporting/#report", "dfnText": "report", "refSections": [{"refs": [{"id": "ref-for-report"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['4d5cebba'] = {"dfnID": "4d5cebba", "url": "https://w3c.github.io/reporting/#report-type", "dfnText": "report type", "refSections": [{"refs": [{"id": "ref-for-report-type"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['8855a9aa'] = {"dfnID": "8855a9aa", "url": "https://webidl.spec.whatwg.org/#idl-DOMString", "dfnText": "DOMString", "refSections": [{"refs": [{"id": "ref-for-idl-DOMString"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['f4531911'] = {"dfnID": "f4531911", "url": "https://webidl.spec.whatwg.org/#Default", "dfnText": "Default", "refSections": [{"refs": [{"id": "ref-for-Default"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['889e932f'] = {"dfnID": "889e932f", "url": "https://webidl.spec.whatwg.org/#Exposed", "dfnText": "Exposed", "refSections": [{"refs": [{"id": "ref-for-Exposed"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['efd1ec5d'] = {"dfnID": "efd1ec5d", "url": "https://webidl.spec.whatwg.org/#idl-object", "dfnText": "object", "refSections": [{"refs": [{"id": "ref-for-idl-object"}], "title": "3. Crash Reports"}], "external": true};
-window.dfnpanelData['crash'] = {"dfnID": "crash", "url": "#crash", "dfnText": "crashed", "refSections": [{"refs": [{"id": "ref-for-crash"}], "title": "2.1. Crash"}, {"refs": [{"id": "ref-for-crash\u2460"}], "title": "2.2. Out-of-Memory"}, {"refs": [{"id": "ref-for-crash\u2461"}], "title": "2.3. Unresponsive"}, {"refs": [{"id": "ref-for-crash\u2462"}, {"id": "ref-for-crash\u2463"}], "title": "3. Crash Reports"}, {"refs": [{"id": "ref-for-crash\u2464"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['out-of-memory-condition'] = {"dfnID": "out-of-memory-condition", "url": "#out-of-memory-condition", "dfnText": "out-of-memory condition", "refSections": [{"refs": [{"id": "ref-for-out-of-memory-condition"}, {"id": "ref-for-out-of-memory-condition\u2460"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['unresponsive-condition'] = {"dfnID": "unresponsive-condition", "url": "#unresponsive-condition", "dfnText": "unresponsive condition", "refSections": [{"refs": [{"id": "ref-for-unresponsive-condition"}, {"id": "ref-for-unresponsive-condition\u2460"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['crash-reports'] = {"dfnID": "crash-reports", "url": "#crash-reports", "dfnText": "Crash reports", "refSections": [{"refs": [{"id": "ref-for-crash-reports"}, {"id": "ref-for-crash-reports\u2460"}, {"id": "ref-for-crash-reports\u2461"}], "title": "3. Crash Reports"}], "external": false};
-window.dfnpanelData['crashreportbody'] = {"dfnID": "crashreportbody", "url": "#crashreportbody", "dfnText": "CrashReportBody", "refSections": [{"refs": [{"id": "ref-for-crashreportbody"}], "title": "3. Crash Reports"}, {"refs": [{"id": "ref-for-crashreportbody\u2460"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['crashreportbody-reason'] = {"dfnID": "crashreportbody-reason", "url": "#crashreportbody-reason", "dfnText": "reason", "refSections": [{"refs": [{"id": "ref-for-crashreportbody-reason"}, {"id": "ref-for-crashreportbody-reason\u2460"}], "title": "3. Crash Reports"}, {"refs": [{"id": "ref-for-crashreportbody-reason\u2461"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['coordinator-process'] = {"dfnID": "coordinator-process", "url": "#coordinator-process", "dfnText": "coordinator process", "refSections": [{"refs": [{"id": "ref-for-coordinator-process"}, {"id": "ref-for-coordinator-process\u2460"}], "title": "4.1. Registering Crash Reports"}, {"refs": [{"id": "ref-for-coordinator-process\u2461"}, {"id": "ref-for-coordinator-process\u2462"}, {"id": "ref-for-coordinator-process\u2463"}, {"id": "ref-for-coordinator-process\u2464"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['endpoint-map'] = {"dfnID": "endpoint-map", "url": "#endpoint-map", "dfnText": "endpoint map", "refSections": [{"refs": [{"id": "ref-for-endpoint-map"}], "title": "4.1. Registering Crash Reports"}, {"refs": [{"id": "ref-for-endpoint-map\u2460"}, {"id": "ref-for-endpoint-map\u2461"}, {"id": "ref-for-endpoint-map\u2462"}], "title": "4.2. Processing Crashes"}], "external": false};
-window.dfnpanelData['process-map'] = {"dfnID": "process-map", "url": "#process-map", "dfnText": "process map", "refSections": [{"refs": [{"id": "ref-for-process-map"}], "title": "4.1. Registering Crash Reports"}, {"refs": [{"id": "ref-for-process-map\u2460"}], "title": "4.2. Processing Crashes"}], "external": false};
-</script>
 <script>/* Boilerplate: script-dom-helper */
+"use strict";
 function query(sel) { return document.querySelector(sel); }
 
 function queryAll(sel) { return [...document.querySelectorAll(sel)]; }
@@ -1577,103 +1335,744 @@ function parseHTML(markup) {
 		el.innerHTML = markup;
 		return el.content;
 	}
+}</script>
+<script>/* Boilerplate: script-dfn-panel */
+"use strict";
+{
+let dfnPanelData = {
+"13dd6cae": {"dfnID":"13dd6cae","dfnText":"node navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-node-navigable"}],"title":"5.2. Processing Crashes"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable"},
+"188c6617": {"dfnID":"188c6617","dfnText":"ReportBody","external":true,"refSections":[{"refs":[{"id":"ref-for-reportbody"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#reportbody"},
+"1bba3db7": {"dfnID":"1bba3db7","dfnText":"parent","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-parent"}],"title":"5.2. Processing Crashes"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
+"35972864": {"dfnID":"35972864","dfnText":"active document","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-document"}],"title":"5.2. Processing Crashes"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document"},
+"4368d1e1": {"dfnID":"4368d1e1","dfnText":"initialize a global's endpoint list","external":true,"refSections":[{"refs":[{"id":"ref-for-initialize-a-globals-endpoint-list"}],"title":"5.1. Registering Crash Reports"}],"url":"https://w3c.github.io/reporting/#initialize-a-globals-endpoint-list"},
+"4d5cebba": {"dfnID":"4d5cebba","dfnText":"report type","external":true,"refSections":[{"refs":[{"id":"ref-for-report-type"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-type"},
+"649608b9": {"dfnID":"649608b9","dfnText":"list","external":true,"refSections":[{"refs":[{"id":"ref-for-list"},{"id":"ref-for-list\u2460"}],"title":"5.1. Registering Crash Reports"}],"url":"https://infra.spec.whatwg.org/#list"},
+"7ed9d314": {"dfnID":"7ed9d314","dfnText":"generate and queue a report","external":true,"refSections":[{"refs":[{"id":"ref-for-generate-and-queue-a-report"}],"title":"5.2. Processing Crashes"}],"url":"https://w3c.github.io/reporting/#generate-and-queue-a-report"},
+"84afeaae": {"dfnID":"84afeaae","dfnText":"error.prototype.stack","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-get-error.prototype-stack"}],"title":"3. Crash Reports"}],"url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
+"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
+"9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#endpoint"},
+"9fe8836b": {"dfnID":"9fe8836b","dfnText":"report","external":true,"refSections":[{"refs":[{"id":"ref-for-report"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report"},
+"a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"2.1. Crash"},{"refs":[{"id":"ref-for-concept-document\u2460"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-concept-document\u2461"}],"title":"4. Document Policy Integration"},{"refs":[{"id":"ref-for-concept-document\u2462"},{"id":"ref-for-concept-document\u2463"},{"id":"ref-for-concept-document\u2464"},{"id":"ref-for-concept-document\u2465"},{"id":"ref-for-concept-document\u2466"},{"id":"ref-for-concept-document\u2467"},{"id":"ref-for-concept-document\u2468"},{"id":"ref-for-concept-document\u2460\u24ea"},{"id":"ref-for-concept-document\u2460\u2460"}],"title":"5. Processing Model"},{"refs":[{"id":"ref-for-concept-document\u2460\u2461"},{"id":"ref-for-concept-document\u2460\u2462"},{"id":"ref-for-concept-document\u2460\u2463"},{"id":"ref-for-concept-document\u2460\u2464"}],"title":"5.1. Registering Crash Reports"},{"refs":[{"id":"ref-for-concept-document\u2460\u2465"}],"title":"5.2. Processing Crashes"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
+"bd736ec6": {"dfnID":"bd736ec6","dfnText":"top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-top-level-traversable"}],"title":"5. Processing Model"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
+"ccd8b64e": {"dfnID":"ccd8b64e","dfnText":"configuration point","external":true,"refSections":[{"refs":[{"id":"ref-for-configuration-point"}],"title":"4. Document Policy Integration"}],"url":"https://wicg.github.io/document-policy/#configuration-point"},
+"cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
+"coordinator-process": {"dfnID":"coordinator-process","dfnText":"coordinator process","external":false,"refSections":[{"refs":[{"id":"ref-for-coordinator-process"},{"id":"ref-for-coordinator-process\u2460"}],"title":"5.1. Registering Crash Reports"},{"refs":[{"id":"ref-for-coordinator-process\u2461"},{"id":"ref-for-coordinator-process\u2462"},{"id":"ref-for-coordinator-process\u2463"},{"id":"ref-for-coordinator-process\u2464"}],"title":"5.2. Processing Crashes"}],"url":"#coordinator-process"},
+"crash": {"dfnID":"crash","dfnText":"crashed","external":false,"refSections":[{"refs":[{"id":"ref-for-crash"}],"title":"2.1. Crash"},{"refs":[{"id":"ref-for-crash\u2460"}],"title":"2.2. Out-of-Memory"},{"refs":[{"id":"ref-for-crash\u2461"}],"title":"2.3. Unresponsive"},{"refs":[{"id":"ref-for-crash\u2462"},{"id":"ref-for-crash\u2463"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crash\u2464"}],"title":"5.2. Processing Crashes"}],"url":"#crash"},
+"crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"}],"url":"#crash-reports"},
+"crashreportbody": {"dfnID":"crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crashreportbody\u2460"}],"title":"5.2. Processing Crashes"}],"url":"#crashreportbody"},
+"crashreportbody-reason": {"dfnID":"crashreportbody-reason","dfnText":"reason","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-reason"},{"id":"ref-for-crashreportbody-reason\u2460"},{"id":"ref-for-crashreportbody-reason\u2461"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crashreportbody-reason\u2462"}],"title":"5.2. Processing Crashes"}],"url":"#crashreportbody-reason"},
+"crashreportbody-stack": {"dfnID":"crashreportbody-stack","dfnText":"stack","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-stack"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-stack"},
+"dom-crashreportbody-reason": {"dfnID":"dom-crashreportbody-reason","dfnText":"reason","external":false,"refSections":[],"url":"#dom-crashreportbody-reason"},
+"dom-crashreportbody-stack": {"dfnID":"dom-crashreportbody-stack","dfnText":"stack","external":false,"refSections":[],"url":"#dom-crashreportbody-stack"},
+"dom-crashreportbody-tojson": {"dfnID":"dom-crashreportbody-tojson","dfnText":"toJSON","external":false,"refSections":[],"url":"#dom-crashreportbody-tojson"},
+"e36ea13c": {"dfnID":"e36ea13c","dfnText":"endpoints","external":true,"refSections":[{"refs":[{"id":"ref-for-windoworworkerglobalscope-endpoints"},{"id":"ref-for-windoworworkerglobalscope-endpoints\u2460"},{"id":"ref-for-windoworworkerglobalscope-endpoints\u2461"}],"title":"5.1. Registering Crash Reports"}],"url":"https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints"},
+"efd1ec5d": {"dfnID":"efd1ec5d","dfnText":"object","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-object"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-object"},
+"endpoint-map": {"dfnID":"endpoint-map","dfnText":"endpoint map","external":false,"refSections":[{"refs":[{"id":"ref-for-endpoint-map"}],"title":"5.1. Registering Crash Reports"},{"refs":[{"id":"ref-for-endpoint-map\u2460"},{"id":"ref-for-endpoint-map\u2461"},{"id":"ref-for-endpoint-map\u2462"}],"title":"5.2. Processing Crashes"}],"url":"#endpoint-map"},
+"f23dc013": {"dfnID":"f23dc013","dfnText":"child navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-child-navigable"}],"title":"5. Processing Model"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable"},
+"f4531911": {"dfnID":"f4531911","dfnText":"Default","external":true,"refSections":[{"refs":[{"id":"ref-for-Default"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Default"},
+"out-of-memory-condition": {"dfnID":"out-of-memory-condition","dfnText":"out-of-memory condition","external":false,"refSections":[{"refs":[{"id":"ref-for-out-of-memory-condition"},{"id":"ref-for-out-of-memory-condition\u2460"}],"title":"5.2. Processing Crashes"}],"url":"#out-of-memory-condition"},
+"process-map": {"dfnID":"process-map","dfnText":"process map","external":false,"refSections":[{"refs":[{"id":"ref-for-process-map"}],"title":"5.1. Registering Crash Reports"},{"refs":[{"id":"ref-for-process-map\u2460"}],"title":"5.2. Processing Crashes"}],"url":"#process-map"},
+"unresponsive-condition": {"dfnID":"unresponsive-condition","dfnText":"unresponsive condition","external":false,"refSections":[{"refs":[{"id":"ref-for-unresponsive-condition"},{"id":"ref-for-unresponsive-condition\u2460"}],"title":"5.2. Processing Crashes"}],"url":"#unresponsive-condition"},
+};
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    genAllDfnPanels();
+
+    document.body.addEventListener("click", (e) => {
+        // If not handled already, just hide all dfn panels.
+        hideAllDfnPanels();
+    });
+});
+
+window.addEventListener("resize", () => {
+    // Pin any visible dfn panel
+    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
+});
+
+function genAllDfnPanels() {
+    for(const panelData of Object.values(dfnPanelData)) {
+        const dfnID = panelData.dfnID;
+        const dfn = document.getElementById(dfnID);
+        if(!dfn) {
+            console.log(`Can't find dfn#${dfnID}.`, panelData);
+            continue;
+        }
+        dfn.panelData = panelData;
+        insertDfnPopupAction(dfn);
+    }
+}
+
+function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
+    const dfnPanel = mk.aside({
+        class: "dfn-panel on",
+        id: `infopanel-for-${dfnID}`,
+        "data-for": dfnID,
+        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        },
+        mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
+            `Info about the '${dfnText}' ${external?"external":""} reference.`),
+        mk.a({href:url, class:"dfn-link"}, url),
+        refSections.length == 0 ? [] :
+            mk.b({}, "Referenced in:"),
+            mk.ul({},
+                ...refSections.map(section=>
+                    mk.li({},
+                        ...section.refs.map((ref, refI)=>
+                            [
+                                mk.a({ href: `#${ref.id}` },
+                                    (refI == 0) ? section.title : `(${refI + 1})`
+                                ),
+                                " ",
+                            ]
+                        ),
+                    ),
+                ),
+            ),
+        genLinkingSyntaxes(dfn),
+    );
+
+    dfnPanel.addEventListener('click', (event) => {
+        if (event.target.nodeName == 'A') {
+            scrollToTargetAndHighlight(event);
+            pinDfnPanel(dfnPanel);
+        }
+        event.stopPropagation();
+        refocusOnTarget(event);
+    });
+    dfnPanel.addEventListener('keydown', (event) => {
+        if(event.keyCode == 27) { // Escape key
+            hideDfnPanel({dfnPanel});
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    });
+
+    dfnPanel.dfn = dfn;
+    dfn.dfnPanel = dfnPanel;
+    return dfnPanel;
+}
+
+
+
+function hideAllDfnPanels() {
+    // Delete the currently-active dfn panel.
+    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
+}
+
+function showDfnPanel(dfn) {
+    hideAllDfnPanels(); // Only display one at a time.
+
+    dfn.setAttribute("aria-expanded", "true");
+
+    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
+
+    // Give the dfn a unique tabindex, and then
+    // give all the tabbable panel bits successive indexes.
+    let tabIndex = 100;
+    dfn.tabIndex = tabIndex++;
+    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
+    for (const el of tabbable) {
+        el.tabIndex = tabIndex++;
+    }
+
+    append(document.body, dfnPanel);
+    positionDfnPanel(dfnPanel);
+}
+
+function positionDfnPanel(dfnPanel) {
+    const dfn = dfnPanel.dfn;
+    const dfnPos = getBounds(dfn);
+    dfnPanel.style.top = dfnPos.bottom + "px";
+    dfnPanel.style.left = dfnPos.left + "px";
+
+    const panelPos = dfnPanel.getBoundingClientRect();
+    const panelMargin = 8;
+    const maxRight = document.body.parentNode.clientWidth - panelMargin;
+    if (panelPos.right > maxRight) {
+        const overflowAmount = panelPos.right - maxRight;
+        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
+        dfnPanel.style.left = newLeft + "px";
+    }
+}
+
+function pinDfnPanel(dfnPanel) {
+    // Switch it to "activated" state, which pins it.
+    dfnPanel.classList.add("activated");
+    dfnPanel.style.position = "fixed";
+    dfnPanel.style.left = null;
+    dfnPanel.style.top = null;
+}
+
+function hideDfnPanel({dfn, dfnPanel}) {
+    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
+    if(!dfn) dfn = dfnPanel.dfn;
+    dfn.dfnPanel = undefined;
+    dfnPanel.dfn = undefined;
+    dfn.setAttribute("aria-expanded", "false");
+    dfn.tabIndex = undefined;
+    dfnPanel.remove()
+}
+
+function toggleDfnPanel(dfn) {
+    if(dfn.dfnPanel) {
+        hideDfnPanel(dfn);
+    } else {
+        showDfnPanel(dfn);
+    }
+}
+
+function insertDfnPopupAction(dfn) {
+    dfn.setAttribute('role', 'button');
+    dfn.setAttribute('aria-expanded', 'false')
+    dfn.tabIndex = 0;
+    dfn.classList.add('has-dfn-panel');
+    dfn.addEventListener('click', (event) => {
+        toggleDfnPanel(dfn);
+        event.stopPropagation();
+    });
+    dfn.addEventListener('keypress', (event) => {
+        const kc = event.keyCode;
+        // 32->Space, 13->Enter
+        if(kc == 32 || kc == 13) {
+            toggleDfnPanel(dfn);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    });
+}
+
+function refocusOnTarget(event) {
+    const target = event.target;
+    setTimeout(() => {
+        // Refocus on the event.target element.
+        // This is needed after browser scrolls to the destination.
+        target.focus();
+    });
+}
+
+// TODO: shared util
+// Returns the root-level absolute position {left and top} of element.
+function getBounds(el, relativeTo=document.body) {
+    const relativeRect = relativeTo.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const top = elRect.top - relativeRect.top;
+    const left = elRect.left - relativeRect.left;
+    return {
+        top,
+        left,
+        bottom: top + elRect.height,
+        right: left + elRect.width,
+    }
+}
+
+function scrollToTargetAndHighlight(event) {
+    let hash = event.target.hash;
+    if (hash) {
+        hash = decodeURIComponent(hash.substring(1));
+        const dest = document.getElementById(hash);
+        if (dest) {
+            dest.classList.add('highlighted');
+            setTimeout(() => dest.classList.remove('highlighted'), 1000);
+        }
+    }
+}
+
+// Functions, divided by link type, that wrap an autolink's
+// contents with the appropriate outer syntax.
+// Alternately, a string naming another type they format
+// the same as.
+function needsFor(type) {
+    switch(type) {
+        case "descriptor":
+        case "value":
+        case "element-attr":
+        case "attr-value":
+        case "element-state":
+        case "method":
+        case "constructor":
+        case "argument":
+        case "attribute":
+        case "const":
+        case "dict-member":
+        case "event":
+        case "enum-value":
+        case "stringifier":
+        case "serializer":
+        case "iterator":
+        case "maplike":
+        case "setlike":
+        case "state":
+        case "mode":
+        case "context":
+        case "facet": return true;
+
+        default: return false;
+    }
+}
+function refusesFor(type) {
+    switch(type) {
+        case "property":
+        case "element":
+        case "interface":
+        case "namespace":
+        case "callback":
+        case "dictionary":
+        case "enum":
+        case "exception":
+        case "typedef":
+        case "http-header":
+        case "permission": return true;
+
+        default: return false;
+    }
+}
+function linkFormatterFromType(type) {
+    switch(type) {
+        case 'scheme':
+        case 'permission':
+        case 'dfn': return (text) => `[=${text}=]`;
+
+        case 'abstract-op': return (text) => `[\$${text}\$]`;
+
+        case 'function':
+        case 'at-rule':
+        case 'selector':
+        case 'value': return (text) => `''${text}''`;
+
+        case 'http-header': return (text) => `[:${text}:]`;
+
+        case 'interface':
+        case 'constructor':
+        case 'method':
+        case 'argument':
+        case 'attribute':
+        case 'callback':
+        case 'dictionary':
+        case 'dict-member':
+        case 'enum':
+        case 'enum-value':
+        case 'exception':
+        case 'const':
+        case 'typedef':
+        case 'stringifier':
+        case 'serializer':
+        case 'iterator':
+        case 'maplike':
+        case 'setlike':
+        case 'extended-attribute':
+        case 'event':
+        case 'idl': return (text) => `{{${text}}}`;
+
+        case 'element-state':
+        case 'element-attr':
+        case 'attr-value':
+        case 'element': return (element) => `<{${element}}>`;
+
+        case 'grammar': return (text) => `${text} (within a <pre class=prod>)`;
+
+        case 'type': return (text)=> `<<${text}>>`;
+
+        case 'descriptor':
+        case 'property': return (text) => `'${text}'`;
+
+        default: return;
+    };
+};
+
+function genLinkingSyntaxes(dfn) {
+    if(dfn.tagName != "DFN") return;
+
+    const type = dfn.getAttribute('data-dfn-type');
+    if(!type) {
+        console.log(`<dfn> doesn't have a data-dfn-type:`, dfn);
+        return [];
+    }
+
+    // Return a function that wraps link text based on the type
+    const linkFormatter = linkFormatterFromType(type);
+    if(!linkFormatter) {
+        console.log(`<dfn> has an unknown data-dfn-type:`, dfn);
+        return [];
+    }
+
+    let ltAlts;
+    if(dfn.hasAttribute('data-lt')) {
+        ltAlts = dfn.getAttribute('data-lt')
+            .split("|")
+            .map(x=>x.trim());
+    } else {
+        ltAlts = [dfn.textContent.trim()];
+    }
+    if(type == "type") {
+        // lt of "<foo>", but "foo" is the interior;
+        // <<foo/bar>> is how you write it with a for,
+        // not <foo/<bar>> or whatever.
+        for(var i = 0; i < ltAlts.length; i++) {
+            const lt = ltAlts[i];
+            const match = /<(.*)>/.exec(lt);
+            if(match) { ltAlts[i] = match[1]; }
+        }
+    }
+
+    let forAlts;
+    if(dfn.hasAttribute('data-dfn-for')) {
+        forAlts = dfn.getAttribute('data-dfn-for')
+            .split(",")
+            .map(x=>x.trim());
+    } else {
+        forAlts = [''];
+    }
+
+    let linkingSyntaxes = [];
+    if(!needsFor(type)) {
+        for(const lt of ltAlts) {
+            linkingSyntaxes.push(linkFormatter(lt));
+        }
+    }
+    if(!refusesFor(type)) {
+        for(const f of forAlts) {
+            linkingSyntaxes.push(linkFormatter(`${f}/${ltAlts[0]}`))
+        }
+    }
+    return [
+        mk.b({}, 'Possible linking syntaxes:'),
+        mk.ul({},
+            ...linkingSyntaxes.map(link => {
+                const copyLink = async () =>
+                    await navigator.clipboard.writeText(link);
+                return mk.li({},
+                    mk.div({ class: 'link-item' },
+                        mk.button({
+                            class: 'copy-icon', title: 'Copy',
+                            type: 'button',
+                            _onclick: copyLink,
+                            tabindex: 0,
+                        }, mk.span({ class: 'icon' }) ),
+                        mk.span({}, link)
+                    )
+                );
+            })
+        )
+    ];
+}
+}
+</script>
+<script>/* Boilerplate: script-ref-hints */
+"use strict";
+{
+let refsData = {
+"#coordinator-process": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"coordinator process","type":"dfn","url":"#coordinator-process"},
+"#crash": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"crash","type":"dfn","url":"#crash"},
+"#crash-reports": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"crash reports","type":"dfn","url":"#crash-reports"},
+"#crashreportbody": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"CrashReportBody","type":"interface","url":"#crashreportbody"},
+"#crashreportbody-reason": {"export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"reason","type":"dfn","url":"#crashreportbody-reason"},
+"#crashreportbody-stack": {"export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"stack","type":"dfn","url":"#crashreportbody-stack"},
+"#endpoint-map": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"endpoint map","type":"dfn","url":"#endpoint-map"},
+"#out-of-memory-condition": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"out-of-memory condition","type":"dfn","url":"#out-of-memory-condition"},
+"#process-map": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"process map","type":"dfn","url":"#process-map"},
+"#unresponsive-condition": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"unresponsive condition","type":"dfn","url":"#unresponsive-condition"},
+"https://dom.spec.whatwg.org/#concept-document": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"child navigable","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#child-navigable"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document": {"export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"active document","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent": {"export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"parent","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"node navigable","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"top-level traversable","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
+"https://infra.spec.whatwg.org/#list": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"list","type":"dfn","url":"https://infra.spec.whatwg.org/#list"},
+"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack": {"export":true,"for_":[],"level":"","normative":true,"shortname":"error stacks","spec":"error stacks","status":"anchor-block","text":"error.prototype.stack","type":"dfn","url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
+"https://w3c.github.io/reporting/#endpoint": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"endpoint","type":"dfn","url":"https://w3c.github.io/reporting/#endpoint"},
+"https://w3c.github.io/reporting/#generate-and-queue-a-report": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"generate and queue a report","type":"dfn","url":"https://w3c.github.io/reporting/#generate-and-queue-a-report"},
+"https://w3c.github.io/reporting/#initialize-a-globals-endpoint-list": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"initialize a global's endpoint list","type":"dfn","url":"https://w3c.github.io/reporting/#initialize-a-globals-endpoint-list"},
+"https://w3c.github.io/reporting/#report": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report","type":"dfn","url":"https://w3c.github.io/reporting/#report"},
+"https://w3c.github.io/reporting/#report-body": {"export":true,"for_":["report"],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"body","type":"dfn","url":"https://w3c.github.io/reporting/#report-body"},
+"https://w3c.github.io/reporting/#report-type": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report type","type":"dfn","url":"https://w3c.github.io/reporting/#report-type"},
+"https://w3c.github.io/reporting/#reportbody": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"ReportBody","type":"interface","url":"https://w3c.github.io/reporting/#reportbody"},
+"https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints": {"export":true,"for_":["WindowOrWorkerGlobalScope"],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"endpoints","type":"dfn","url":"https://w3c.github.io/reporting/#windoworworkerglobalscope-endpoints"},
+"https://webidl.spec.whatwg.org/#Default": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Default","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Default"},
+"https://webidl.spec.whatwg.org/#Exposed": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
+"https://webidl.spec.whatwg.org/#idl-DOMString": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"https://webidl.spec.whatwg.org/#idl-object": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"object","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-object"},
+"https://wicg.github.io/document-policy/#configuration-point": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"document-policy","spec":"document-policy","status":"current","text":"configuration point","type":"dfn","url":"https://wicg.github.io/document-policy/#configuration-point"},
+};
+
+function mkRefHint(link, ref) {
+    const linkText = link.textContent;
+    let dfnTextElements = '';
+    if (ref.text != linkText) {
+        dfnTextElements =
+            mk.li({},
+                mk.b({}, "Term: "),
+                mk.span({}, ref.text)
+            );
+    }
+    const forList = ref.for_;
+    let forListElements;
+    if(forList.length == 0) {
+        forListElements = [];
+    } else if(forList.length == 1) {
+        forListElements = mk.li({},
+            mk.b({}, "For: "),
+            mk.span({}, forList[0]),
+        );
+    } else {
+        forListElements = mk.li({},
+            mk.b({}, "For: "),
+            mk.ul({},
+                ...forList.map(forItem =>
+                    mk.li({},
+                        mk.span({}, forItem)
+                    ),
+                ),
+            ),
+        );
+    }
+    const url = ref.url;
+    const safeUrl = encodeURIComponent(url);
+    const hintPanel = mk.aside({
+        class: "ref-hint",
+        id: `ref-hint-for-${safeUrl}`,
+        "data-for": url,
+        "aria-labelled-by": `ref-hint-for-${safeUrl}`,
+    },
+        mk.ul({},
+            dfnTextElements,
+            mk.li({},
+                mk.b({}, "URL: "),
+                mk.a({ href: url, class: "ref" }, url),
+            ),
+            mk.li({},
+                mk.b({}, "Type: "),
+                mk.span({}, `${ref.type}`),
+            ),
+            mk.li({},
+                mk.b({}, "Spec: "),
+                mk.span({}, `${ref.spec ? ref.spec : ''}`),
+            ),
+            forListElements
+        ),
+    );
+    hintPanel.forLink = link;
+    setupRefHintEventListeners(link, hintPanel);
+    return hintPanel;
+}
+
+function hideAllRefHints() {
+    queryAll(".ref-hint").forEach(el=>hideRefHint(el));
+}
+
+function hideRefHint(refHint) {
+    const link = refHint.forLink;
+    link.setAttribute("aria-expanded", "false");
+    if(refHint.teardownEventListeners) {
+        refHint.teardownEventListeners();
+    }
+    refHint.remove();
+}
+
+function showRefHint(link) {
+    if(link.classList.contains("dfn-link")) return;
+    const url = link.getAttribute("href");
+    const ref = refsData[url];
+    if(!ref) return;
+
+    hideAllRefHints(); // Only display one at this time.
+
+    const refHint = mkRefHint(link, ref);
+    append(document.body, refHint);
+    link.setAttribute("aria-expanded", "true");
+    positionRefHint(refHint);
+}
+
+function setupRefHintEventListeners(link, refHint) {
+    if (refHint.teardownEventListeners) return;
+    // Add event handlers to hide the refHint after the user moves away
+    // from both the link and refHint, if not hovering either within one second.
+    let timeout = null;
+    const startHidingRefHint = (event) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            hideRefHint(refHint);
+        }, 1000);
+    }
+    const resetHidingRefHint = (event) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = null;
+    };
+    link.addEventListener("mouseleave", startHidingRefHint);
+    link.addEventListener("mouseenter", resetHidingRefHint);
+    link.addEventListener("blur", startHidingRefHint);
+    link.addEventListener("focus", resetHidingRefHint);
+    refHint.addEventListener("mouseleave", startHidingRefHint);
+    refHint.addEventListener("mouseenter", resetHidingRefHint);
+    refHint.addEventListener("blur", startHidingRefHint);
+    refHint.addEventListener("focus", resetHidingRefHint);
+
+    refHint.teardownEventListeners = () => {
+        // remove event listeners
+        resetHidingRefHint();
+        link.removeEventListener("mouseleave", startHidingRefHint);
+        link.removeEventListener("mouseenter", resetHidingRefHint);
+        link.removeEventListener("blur", startHidingRefHint);
+        link.removeEventListener("focus", resetHidingRefHint);
+        refHint.removeEventListener("mouseleave", startHidingRefHint);
+        refHint.removeEventListener("mouseenter", resetHidingRefHint);
+        refHint.removeEventListener("blur", startHidingRefHint);
+        refHint.removeEventListener("focus", resetHidingRefHint);
+    };
+}
+
+function positionRefHint(refHint) {
+    const link = refHint.forLink;
+    const linkPos = getBounds(link);
+    refHint.style.top = linkPos.bottom + "px";
+    refHint.style.left = linkPos.left + "px";
+
+    const panelPos = refHint.getBoundingClientRect();
+    const panelMargin = 8;
+    const maxRight = document.body.parentNode.clientWidth - panelMargin;
+    if (panelPos.right > maxRight) {
+        const overflowAmount = panelPos.right - maxRight;
+        const newLeft = Math.max(panelMargin, linkPos.left - overflowAmount);
+        refHint.style.left = newLeft + "px";
+    }
+}
+
+// TODO: shared util
+// Returns the root-level absolute position {left and top} of element.
+function getBounds(el, relativeTo=document.body) {
+    const relativeRect = relativeTo.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const top = elRect.top - relativeRect.top;
+    const left = elRect.left - relativeRect.left;
+    return {
+        top,
+        left,
+        bottom: top + elRect.height,
+        right: left + elRect.width,
+    }
+}
+
+function showRefHintListener(e) {
+    // If the target isn't in a link (or is a link),
+    // just ignore it.
+    let link = e.target.closest("a");
+    if(!link) return;
+
+    // If the target is in a ref-hint panel
+    // (aka a link in the already-open one),
+    // also just ignore it.
+    if(link.closest(".ref-hint")) return;
+
+    // Otherwise, show the panel for the link.
+    showRefHint(link);
+}
+
+function hideAllHintsListener(e) {
+    // If the click is inside a ref-hint panel, ignore it.
+    if(e.target.closest(".ref-hint")) return;
+    // Otherwise, close all the current panels.
+    hideAllRefHints();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.addEventListener("mousedown", showRefHintListener);
+    document.body.addEventListener("focus", showRefHintListener);
+
+    document.body.addEventListener("click", hideAllHintsListener);
+});
+
+window.addEventListener("resize", () => {
+    // Hide any open ref hint.
+    hideAllRefHints();
+});
 }
 </script>
 <script>/* Boilerplate: script-var-click-highlighting */
+"use strict";
+{
 /*
 Color-choosing design:
 
-Colors are ordered by goodness.
-Each color has a usage count (initially zero).
-Each variable has a last-used color.
-
-* If the var has a last-used color, and that color's usage is 0,
-    return that color.
-* Otherwise, return the lowest-indexed color with the lowest usage.
-    Increment the color's usage and set it as the last-used color
-    for that var.
-* On unclicking, decrement usage of the color.
+* Colors are ordered by goodness.
+* On clicking a var, give it the earliest color
+    with the lowest usage in the algorithm.
+* On re-clicking, re-use the var's most recent color
+    if that's not currently being used elsewhere.
 */
-"use strict";
-{
-    document.addEventListener("click", e=>{
-        if(e.target.nodeName == "VAR") {
-            highlightSameAlgoVars(e.target);
-        }
-    });
-    const indexCounts = new Map();
-    const indexNames = new Map();
-    function highlightSameAlgoVars(v) {
-        // Find the algorithm container.
-        let algoContainer = null;
-        let searchEl = v;
-        while(algoContainer == null && searchEl != document.body) {
-            searchEl = searchEl.parentNode;
-            if(searchEl.hasAttribute("data-algorithm")) {
-                algoContainer = searchEl;
-            }
-        }
 
-        // Not highlighting document-global vars,
-        // too likely to be unrelated.
-        if(algoContainer == null) return;
+const COLOR_COUNT = 7;
 
-        const algoName = algoContainer.getAttribute("data-algorithm");
-        const varName = getVarName(v);
-        const addClass = !v.classList.contains("selected");
-        let highlightClass = null;
-        if(addClass) {
-            const index = chooseHighlightIndex(algoName, varName);
-            indexCounts.get(algoName)[index] += 1;
-            indexNames.set(algoName+"///"+varName, index);
-            highlightClass = nameFromIndex(index);
-        } else {
-            const index = previousHighlightIndex(algoName, varName);
-            indexCounts.get(algoName)[index] -= 1;
-            highlightClass = nameFromIndex(index);
-        }
+document.addEventListener("click", e=>{
+    if(e.target.nodeName == "VAR") {
+        highlightSameAlgoVars(e.target);
+    }
+});
 
-        // Find all same-name vars, and toggle their class appropriately.
+function highlightSameAlgoVars(v) {
+    // Find the algorithm container.
+    let algoContainer = findAlgoContainer(v);
+
+    // Not highlighting document-global vars,
+    // too likely to be unrelated.
+    if(algoContainer == null) return;
+
+    const varName = nameFromVar(v);
+    if(!v.hasAttribute("data-var-color")) {
+        const newColor = chooseHighlightColor(algoContainer, v);
         for(const el of algoContainer.querySelectorAll("var")) {
-            if(getVarName(el) == varName) {
-                el.classList.toggle("selected", addClass);
-                el.classList.toggle(highlightClass, addClass);
+            if(nameFromVar(el) == varName) {
+                el.setAttribute("data-var-color", newColor);
+                el.setAttribute("data-var-last-color", newColor);
+            }
+        }
+    } else {
+        for(const el of algoContainer.querySelectorAll("var")) {
+            if(nameFromVar(el) == varName) {
+                el.removeAttribute("data-var-color");
             }
         }
     }
-    function getVarName(el) {
-        return el.textContent.replace(/(\s|\xa0)+/, " ").trim();
+}
+function findAlgoContainer(el) {
+    while(el != document.body) {
+        if(el.hasAttribute("data-algorithm")) return el;
+        el = el.parentNode;
     }
-    function chooseHighlightIndex(algoName, varName) {
-        let indexes = null;
-        if(indexCounts.has(algoName)) {
-            indexes = indexCounts.get(algoName);
-        } else {
-            // 7 classes right now
-            indexes = [0,0,0,0,0,0,0];
-            indexCounts.set(algoName, indexes);
-        }
+    return null;
+}
+function nameFromVar(el) {
+    return el.textContent.replace(/(\s|\xa0)+/g, " ").trim();
+}
+function colorCountsFromContainer(container) {
+    const namesFromColor = Array.from({length:COLOR_COUNT}, x=>new Set());
+    for(let v of container.querySelectorAll("var[data-var-color]")) {
+        let color = +v.getAttribute("data-var-color");
+        namesFromColor[color].add(nameFromVar(v));
+    }
 
-        // If the element was recently unclicked,
-        // *and* that color is still unclaimed,
-        // give it back the same color.
-        const lastIndex = previousHighlightIndex(algoName, varName);
-        if(indexes[lastIndex] === 0) return lastIndex;
-
-        // Find the earliest index with the lowest count.
-        const minCount = Math.min.apply(null, indexes);
-        let index = null;
-        for(var i = 0; i < indexes.length; i++) {
-            if(indexes[i] == minCount) {
-                return i;
-            }
+    return namesFromColor.map(x=>x.size);
+}
+function leastUsedColor(colors) {
+    // Find the earliest color with the lowest count.
+    let minCount = Infinity;
+    let minColor = null;
+    for(var i = 0; i < colors.length; i++) {
+        if(colors[i] < minCount) {
+            minColor = i;
+            minCount = colors[i];
         }
     }
-    function previousHighlightIndex(algoName, varName) {
-        return indexNames.get(algoName+"///"+varName);
+    return minColor;
+}
+function chooseHighlightColor(container, v) {
+    const colorCounts = colorCountsFromContainer(container);
+    if(v.hasAttribute("data-var-last-color")) {
+        let color = +v.getAttribute("data-var-last-color");
+        if(colorCounts[color] == 0) return color;
     }
-    function nameFromIndex(index) {
-        return "selected" + index;
-    }
+    return leastUsedColor(colorCounts);
+}
 }
 </script>
