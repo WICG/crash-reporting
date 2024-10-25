@@ -20,6 +20,10 @@ Include MDN Panels: no
 url: https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack; type: dfn; spec: ERROR STACKS
   text: Error.prototype.stack
 </pre>
+<pre class=link-defaults>
+spec:reporting-1; type:dfn; text:endpoints
+spec:infra; type:dfn; text:list
+</pre>
 
 Introduction {#intro}
 ============
@@ -47,21 +51,39 @@ Concepts {#concept}
 Crash {#concept-crash}
 -----
 
+Any time a process controlling [=Documents=] is abruptly terminated, whether by
+a supervising process within the user agent, or by the underlying operating
+system, the process is said to have <dfn lt="crash">crashed</dfn>. This may be
+due to a logic error in the browser, an unexpected hardware fault, the computer
+running out of needed resources, among other reasons. Specific kinds of
+[=crashes=] are detailed below.
+
 Out-of-Memory {#concept-oom}
 -------------
+
+Memory in computing systems is a finite resource, and is generally granted to
+running processes on request. When a request to allocate additional memory is
+denied, this may be treated as an unrecoverable error, and the requesting
+process may be terminated. A process terminated for this reason has [=crashed=]
+due to an <dfn>out-of-memory condition</dfn>.
 
 Unresponsive {#concept-unresponsive}
 ------------
 
+A process may be terminated in order to destroy a page which is no longer able
+to respond to user input. This may happen, for instance, because of an infinite
+loop in a script in the page, such that the script never completes and will
+never return control back to the event loop. A process terminated for this
+reason has [=crashed=] due to an <dfn>unresponsive condition</dfn>.
 
 Crash Reports {#crash-report}
 =============
 
 <dfn>Crash reports</dfn> indicate that the user was unable to continue using the
 page because the browser (or one of its processes necessary for the page)
-crashed. For security reasons, no details of the crash are communicated except
-for a unique identifier (which can be interpreted by the browser vendor), and
-optionally the reason for the crash (such as "oom").
+[=crashed=]. For security reasons, no details of the crash are communicated
+except for a unique identifier (which can be interpreted by the browser vendor),
+and optionally the reason for the [=crash=] (such as "oom").
 
 [=Crash reports=] are a type of [=report=].
 
@@ -137,6 +159,108 @@ call stack, at the time of the crash, to be included in a crash report.
 <div class="example">
 <xmp class="http">Document-Policy: include-js-call-stacks-in-crash-reports</xmp>
 </div>
+
+Processing Model {#processing}
+================
+
+Note: Browser architectures vary, and is it possible that a browser exists which
+cannot support this specification as written due to its architecture.
+
+This processing model makes certain assumptions about the underlying process
+architecture. Namely:
+
+* Each [=Document=] is controlled by a single process, such that if that process
+   crashes, the controlled [=Document=] will immediately and abruptly terminate.
+
+   Note: It is not required that all such [=Documents=] are related to each
+   other in any way other than being controlled by the same process.
+
+* A separate <dfn>coordinator process</dfn> exists which is responsible for
+   monitoring the processes which control documents, and which is expected to
+   survive even when those processes crash. This process is able to observe the
+   document process crash.
+
+* The coordinator process maintains enough information about the state of each
+   [=Document=] that after a process crash, it can reconstruct the frame tree
+   that existed in each of that process' documents before the crash occurred.
+
+If these assumptions do not hold for a particular user agent, then this
+processing model may need to be modfied.
+
+These assumptions allow significant flexibility regarding the association of
+documents and processes. The following are all possible arrangments which this
+processing model is intended to support:
+
+* A process may control multiple [=Documents=]. These [=Documents=] may be part
+   of the same page, or may reside in different pages. They may be [=/top-level
+   traversables=] or [=child navigables=].
+* A process may control [=Documents=] which are cross-site or cross-origin to
+   each other.
+* A [=Document=] in a process which has crashed may have contained child
+   documents in processes which have not crashed
+* Similarly, a [=Document=] in a process which has crashed may be contained
+   within a parent document in a process which has not crashed.
+
+Registering Crash Reports {#registration}
+-------------------------
+
+The [=coordinator process=] has an <dfn>endpoint map</dfn>, which is a map of
+[=Documents=] -> [=endpoints=], initially empty.
+
+The [=coordinator process=] has a <dfn>process map</dfn>, which is a map of
+process -> [=lists=] of [=Documents=].
+
+Note: The maintenance of the [=process map=] is out of scope for this
+specification. It is intended that the user agent track, for every process it
+creates for controlling [=Documents=], a [=list=] of which [=Documents=] are
+controlled by that process.
+
+When a |document| [=initialize a global's endpoint list|initializes its endpoint
+list=], it should run the following step:
+
+1. If |document|'s [=endpoints=] contains `"default"`, then set
+    [=endpoint map=][|document|] to |document|'s [=endpoints=]["default"].
+
+When a document is destroyed, remove it from the map.
+
+Processing Crashes {#processing-crash}
+------------------
+
+<div class="algorithm" data-algorithm="process-crash">
+Given a crashed process |process|, with a string |reason|, this algorithm sends
+crash reports to the appropriate endpoints:
+
+1. Let |affectedDocuments| be [=process map=][|process|]
+1. For each |document| in |affectedDocuments|:
+  1. If [=endpoint map=][|document|] does not exist, continue.
+  1. Let |endpoint| be [=endpoint map=][|document|].
+  1. Let |parent| be |document|'s [=node navigable=]'s [=navigable/parent=]'s
+     [=active document=].
+  1. If |parent| is in |affectedDocuments|:
+    1. If [=endpoint map=][|parent|] = |endpoint|, continue.
+  1. Let |body| be a new {{CrashReportBody}}, initialized
+      as follows:
+
+        :   [=CrashReportBody/reason=]
+        ::  |reason|
+
+  1. Execute [=generate and queue a report=] with "crash", |endpoint|, and
+      |body|.
+
+</div>
+
+If a process controlling [=Documents=] crashes due to an
+[=out-of-memory condition=], the [=coordinator process=] should process a crash
+for |process| with the reason string "oom".
+
+If the user agent destroyes a process due to an [=unresponsive condition=], the
+[=coordinator process=] should process a crash for |process| with the reason
+string "unresponsive".
+
+If the [=coordinator process=] observes a [=crash=] in a process which was not
+due to an [=out-of-memory condition=] or an [=unresponsive condition=], then the
+[=coordinator process=] should process a crash for |process| with the reason
+string "".
 
 Implementation Considerations {#implementation}
 =============================
