@@ -73,6 +73,7 @@ interface CrashReportBody : ReportBody {
   [Default] object toJSON();
   readonly attribute DOMString? reason;
   readonly attribute DOMString? stack;
+  readonly attribute DOMString? is_top_level;
 };
 </xmp>
 
@@ -83,22 +84,22 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
   type of crash that occured, if known, or omitted otherwise. The valid
   <a>reason</a> strings are shown below.
 
-<table border=1 cellpadding=5px style="border-collapse: collapse;">
-  <tbody>
-    <tr>
-      <th><a>Reason</a></th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>oom</td>
-      <td>The page ran out of memory.</td>
-    </tr>
-    <tr>
-      <td>unresponsive</td>
-      <td>The page was killed due to being unresponsive.</td>
-    </tr>
-  </tbody>
-</table>
+  <table border=1 cellpadding=5px style="border-collapse: collapse;">
+    <tbody>
+      <tr>
+        <th><a>Reason</a></th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>oom</td>
+        <td>The page ran out of memory.</td>
+      </tr>
+      <tr>
+        <td>unresponsive</td>
+        <td>The page was killed due to being unresponsive.</td>
+      </tr>
+    </tbody>
+  </table>
 
 * <dfn for="CrashReportBody">stack</dfn>: The string representation of the
   JavaScript call stack at the time of the crash, if all of the following are
@@ -111,6 +112,10 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
 
   The string representation used for [=CrashReportBody/stack=] is the
   same as that used by the [=Error.prototype.stack=] property.
+
+* <dfn for="CrashReportBody" noexport>is_top_level</dfn>: The stringified boolean value
+  "true" or "false", representing whether the {{Document}} that crashed belonged
+  to a [=/top-level traversable=], or not.
 
 Note: Crash reports are always delivered to the [=endpoint=] named `default`;
 there is currently no way to override this.  If you want to receive other kinds
