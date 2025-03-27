@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="a62db2a6af728166f41c242bcf783b6b4ac535e6" name="revision">
+  <meta content="080ebcd078e47365f11276652a3f0d7c9d891106" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -694,7 +694,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Crash Reporting</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-26">26 March 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-27">27 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -808,18 +808,20 @@ optionally the reason for the crash (such as "oom").</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
 type of crash that occured, if known, or omitted otherwise. The valid <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason">reason</a> strings are shown below.</p>
-     <table border="1" cellpadding="5px" style="border-collapse: collapse;">
-      <tbody>
-       <tr>
-        <th><a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason①">Reason</a>
-        <th>Description
-       <tr>
-        <td>oom
-        <td>The page ran out of memory.
-       <tr>
-        <td>unresponsive
-        <td>The page was killed due to being unresponsive.
-     </table>
+   </ul>
+   <table border="1" cellpadding="5px" style="border-collapse: collapse;">
+    <tbody>
+     <tr>
+      <th><a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason①">Reason</a>
+      <th>Description
+     <tr>
+      <td>oom
+      <td>The page ran out of memory.
+     <tr>
+      <td>unresponsive
+      <td>The page was killed due to being unresponsive.
+   </table>
+   <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-stack">stack</dfn>: The string representation of the
 JavaScript call stack at the time of the crash, if all of the following are
