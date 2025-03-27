@@ -20,6 +20,9 @@ Include MDN Panels: no
 url: https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack; type: dfn; spec: ERROR STACKS
   text: Error.prototype.stack
 </pre>
+<pre class="link-defaults">
+  spec:dom; type:dfn; for:/; text:document
+</pre>
 
 Introduction {#intro}
 ============

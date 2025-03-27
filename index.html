@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="080ebcd078e47365f11276652a3f0d7c9d891106" name="revision">
+  <meta content="156fc8b4911713039626c36a86231b08102cffe0" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -830,7 +830,7 @@ true, or omitted otherwise:</p>
       <li data-md>
        <p>The crash <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason②">reason</a> is "unresponsive".</p>
       <li data-md>
-       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#clone-a-node-document" id="ref-for-clone-a-node-document">Document</a> which crashed is <code>true</code>.</p>
+       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">Document</a> which crashed is <code>true</code>.</p>
       <li data-md>
        <p>The call stack can be recovered from the crashed document.</p>
      </ul>
@@ -853,7 +853,7 @@ whose serialization can be embedded in the out-of-band reports.</p>
    <p>Site authors may opt in to recording the JavaScript call stack with some
 reports.</p>
    <p>This spec defines a <a data-link-type="dfn" href="https://wicg.github.io/document-policy/#configuration-point" id="ref-for-configuration-point">configuration point</a> with the name <code>include-js-call-stacks-in-crash-reports</code>. Its type is boolean, and its default
-value is <code>false</code>. When configured as <code>true</code> in a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#clone-a-node-document" id="ref-for-clone-a-node-document①">Document</a> for which crash
+value is <code>false</code>. When configured as <code>true</code> in a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">Document</a> for which crash
 reporting is enabled, this will cause a string representation of the JavaScript
 call stack, at the time of the crash, to be included in a crash report.</p>
    <div class="example" id="example-565177e8">
@@ -942,7 +942,7 @@ reporting specifically.</p>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="85394472">Document</span>
-     <li><span class="dfn-paneled" id="a84c14c9">document</span>
+     <li><span class="dfn-paneled" id="a973e0fe">document</span>
     </ul>
    <li>
     <a data-link-type="biblio">[ERROR STACKS]</a> defines the following terms:
@@ -1204,7 +1204,7 @@ let dfnPanelData = {
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#endpoint"},
 "9fe8836b": {"dfnID":"9fe8836b","dfnText":"report","external":true,"refSections":[{"refs":[{"id":"ref-for-report"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report"},
-"a84c14c9": {"dfnID":"a84c14c9","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-clone-a-node-document"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-clone-a-node-document\u2460"}],"title":"4. Document Policy Integration"}],"url":"https://dom.spec.whatwg.org/#clone-a-node-document"},
+"a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-concept-document\u2460"}],"title":"4. Document Policy Integration"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
 "bd736ec6": {"dfnID":"bd736ec6","dfnText":"top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-top-level-traversable"}],"title":"3. Crash Reports"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
 "ccd8b64e": {"dfnID":"ccd8b64e","dfnText":"configuration point","external":true,"refSections":[{"refs":[{"id":"ref-for-configuration-point"}],"title":"4. Document Policy Integration"}],"url":"https://wicg.github.io/document-policy/#configuration-point"},
 "cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
@@ -1611,7 +1611,7 @@ let refsData = {
 "#crashreportbody": {"displayText":"CrashReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"CrashReportBody","type":"interface","url":"#crashreportbody"},
 "#crashreportbody-reason": {"displayText":"reason","export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"reason","type":"dfn","url":"#crashreportbody-reason"},
 "#crashreportbody-stack": {"displayText":"stack","export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"stack","type":"dfn","url":"#crashreportbody-stack"},
-"https://dom.spec.whatwg.org/#clone-a-node-document": {"displayText":"document","export":true,"for_":["clone a node"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#clone-a-node-document"},
+"https://dom.spec.whatwg.org/#concept-document": {"displayText":"document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
 "https://dom.spec.whatwg.org/#document": {"displayText":"Document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Document","type":"interface","url":"https://dom.spec.whatwg.org/#document"},
 "https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable": {"displayText":"top-level traversable","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"top-level traversable","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
 "https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack": {"displayText":"Error.prototype.stack","export":true,"for_":[],"level":"","normative":true,"shortname":"error stacks","spec":"error stacks","status":"anchor-block","text":"error.prototype.stack","type":"dfn","url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
