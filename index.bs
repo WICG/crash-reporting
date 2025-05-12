@@ -122,7 +122,7 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
   to a [=/top-level traversable=], or not.
 
 * <dfn for="CrashReportBody" noexport>page_visibility</dfn>: The string value
-  "<code>visible</code>" or "<code>hidden</code>" derived from the {{DocumentVisibilityState}}
+  "<code>visible</code>" or "<code>hidden</code>", matching the {{DocumentVisibilityState}}
   enum that is exposed to the web platform, via {{Document}}.{{Document/visibilityState}}.
   It represents whether the visual viewport that the crashed {{Document}} was hosted in was
   visible at all, or fully occluded.
