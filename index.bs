@@ -20,6 +20,9 @@ Include MDN Panels: no
 url: https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack; type: dfn; spec: ERROR STACKS
   text: Error.prototype.stack
 </pre>
+<pre class="link-defaults">
+  spec:dom; type:dfn; for:/; text:document
+</pre>
 
 Introduction {#intro}
 ============
@@ -73,6 +76,8 @@ interface CrashReportBody : ReportBody {
   [Default] object toJSON();
   readonly attribute DOMString? reason;
   readonly attribute DOMString? stack;
+  readonly attribute DOMString? is_top_level;
+  readonly attribute DocumentVisibilityState? page_visibility;
 };
 </xmp>
 
@@ -111,6 +116,16 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
 
   The string representation used for [=CrashReportBody/stack=] is the
   same as that used by the [=Error.prototype.stack=] property.
+
+* <dfn for="CrashReportBody" noexport>is_top_level</dfn>: The stringified boolean value
+  "true" or "false", representing whether the {{Document}} that crashed belonged
+  to a [=/top-level traversable=], or not.
+
+* <dfn for="CrashReportBody" noexport>page_visibility</dfn>: The string value
+  "<code>visible</code>" or "<code>hidden</code>", matching the {{DocumentVisibilityState}}
+  enum that is exposed to the web platform, via {{Document}}.{{Document/visibilityState}}.
+  It represents whether the visual viewport that the crashed {{Document}} was hosted in was
+  visible at all, or fully occluded.
 
 Note: Crash reports are always delivered to the [=endpoint=] named `default`;
 there is currently no way to override this.  If you want to receive other kinds
