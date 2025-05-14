@@ -76,7 +76,7 @@ interface CrashReportBody : ReportBody {
   [Default] object toJSON();
   readonly attribute DOMString? reason;
   readonly attribute DOMString? stack;
-  readonly attribute DOMString? is_top_level;
+  readonly attribute boolean? is_top_level;
   readonly attribute DocumentVisibilityState? page_visibility;
 };
 </xmp>
@@ -117,9 +117,8 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
   The string representation used for [=CrashReportBody/stack=] is the
   same as that used by the [=Error.prototype.stack=] property.
 
-* <dfn for="CrashReportBody" noexport>is_top_level</dfn>: The stringified boolean value
-  "true" or "false", representing whether the {{Document}} that crashed belonged
-  to a [=/top-level traversable=], or not.
+* <dfn for="CrashReportBody" noexport>is_top_level</dfn>: A boolean representing
+  whether the {{Document}} that crashed belonged to a [=/top-level traversable=], or not.
 
 * <dfn for="CrashReportBody" noexport>page_visibility</dfn>: The string value
   "<code>visible</code>" or "<code>hidden</code>", matching the {{DocumentVisibilityState}}
