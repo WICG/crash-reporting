@@ -49,7 +49,7 @@ One difference between `crashStorage` and `sessionStorage` is that while `sessio
 persists across refreshes in a traversable navigable, `crashStorage` data does not need this level
 of persistence, however the exact policy we land on is TBD.
 
-**Which reports get access to `crashStorage` data**
+**Which reports get access to `crashStorage` data?**
 
 There is an
 [open question related to the scope of `crashStorage` data](https://github.com/WICG/crash-reporting/issues/25),
