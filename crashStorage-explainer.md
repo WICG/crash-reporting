@@ -43,7 +43,7 @@ in that it is
 as opposed to the user agent's storage shed, like `localStorage`. This proposal entails creating a new
 [registered storage endpoint](https://storage.spec.whatwg.org/#registered-storage-endpoints).
 
-**Refresh persistence*
+**Refresh persistence**
 
 One difference between `crashStorage` and `sessionStorage` is that while `sessionStorage` data
 persists across refreshes in a traversable navigable, `crashStorage` data does not need this level
