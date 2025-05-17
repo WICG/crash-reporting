@@ -134,6 +134,9 @@ experience.
 
 ## Security and privacy concerns
 
+The following are the answers to the W3C TAG's
+[security and privacy self-review questionnaire](https://w3c.github.io/security-questionnaire/).
+
 > 2.1. What information does this feature expose, and for what purposes?
 
 Only developer-supplied information collected throughout an origin's session, and this information
