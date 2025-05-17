@@ -134,6 +134,12 @@ experience.
 
 ## Security and privacy concerns
 
+TODO: Add `crashStorage`-specific security and privacy notes, distinct from
+https://wicg.github.io/crash-reporting/#security and
+https://wicg.github.io/crash-reporting/#privacy, and the questionnaire below.
+
+----
+
 The following are the answers to the W3C TAG's
 [security and privacy self-review questionnaire](https://w3c.github.io/security-questionnaire/).
 
@@ -231,8 +237,6 @@ TODO.
 > 2.21. Does your feature allow sites to learn about the user’s use of assistive technology?
 
 No.
-
-TODO.
 
 [^1]: This may be changing soon; see
 https://github.com/WICG/crash-reporting/issues/24.
