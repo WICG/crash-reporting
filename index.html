@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="4b242b4fb9ae0e20e9446fc80db5595f1264998f" name="revision">
+  <meta content="4327929e46252daf38be8e7369650d8c9f93ccff" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -743,7 +743,11 @@ through the use of the Reporting API.</p>
       <li><a href="#concept-oom"><span class="secno">2.2</span> <span class="content">Out-of-Memory</span></a>
       <li><a href="#concept-unresponsive"><span class="secno">2.3</span> <span class="content">Unresponsive</span></a>
      </ol>
-    <li><a href="#crash-report"><span class="secno">3</span> <span class="content">Crash Reports</span></a>
+    <li>
+     <a href="#crash-report"><span class="secno">3</span> <span class="content">Crash Reports</span></a>
+     <ol class="toc">
+      <li><a href="#crash-reports-delivery-priority"><span class="secno">3.1</span> <span class="content"><span>Crash Reports</span> Delivery Priority</span></a>
+     </ol>
     <li><a href="#document-policy"><span class="secno">4</span> <span class="content">Document Policy Integration</span></a>
     <li>
      <a href="#implementation"><span class="secno">5</span> <span class="content">Implementation Considerations</span></a>
@@ -845,14 +849,19 @@ whether the <code class="idl"><a data-link-type="idl" href="https://dom.spec.wha
 It represents whether the visual viewport that the crashed <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> was hosted in was
 visible at all, or fully occluded.</p>
    </ul>
-   <p class="note" role="note"><span class="marker">Note:</span> Crash reports are always delivered to the <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> named <code>default</code>;
-there is currently no way to override this.  If you want to receive other kinds
-of reports, but not crash reports, make sure to use a different name for the
-endpoint that you choose for those reports.</p>
    <p class="note" role="note"><span class="marker">Note:</span> Crash reports are not observable to JavaScript, as the page which would
 receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.</p>
+   <h3 class="heading settled" data-level="3.1" id="crash-reports-delivery-priority"><span class="secno">3.1. </span><span class="content"><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports③">Crash Reports</a> Delivery Priority</span><a class="self-link" href="#crash-reports-delivery-priority"></a></h3>
+    If a <code>crash-reporting</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports④">crash reports</a> are delivered to it.
+   <p>Otherwise, if a <code>default</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint①">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑤">crash reports</a> are delivered to it.</p>
+   <p>If neither <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint②">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑥">crash reports</a> are not delivered.</p>
+   <div class="example" id="example-8ab2445e">
+    <a class="self-link" href="#example-8ab2445e"></a>
+<pre>Reporting-Endpoints: crash-reporting="https://example.com/reports"
+</pre>
+   </div>
    <h2 class="heading settled" data-level="4" id="document-policy"><span class="secno">4. </span><span class="content">Document Policy Integration</span><a class="self-link" href="#document-policy"></a></h2>
    <p>Site authors may opt in to recording the JavaScript call stack with some
 reports.</p>
@@ -1218,14 +1227,14 @@ let dfnPanelData = {
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "8b488914": {"dfnID":"8b488914","dfnText":"DocumentVisibilityState","external":true,"refSections":[{"refs":[{"id":"ref-for-documentvisibilitystate"},{"id":"ref-for-documentvisibilitystate\u2460"}],"title":"3. Crash Reports"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"},
-"9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#endpoint"},
+"9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"},{"id":"ref-for-endpoint\u2460"},{"id":"ref-for-endpoint\u2461"}],"title":"3.1. Crash Reports Delivery Priority"}],"url":"https://w3c.github.io/reporting/#endpoint"},
 "9fe8836b": {"dfnID":"9fe8836b","dfnText":"report","external":true,"refSections":[{"refs":[{"id":"ref-for-report"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report"},
 "a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-concept-document\u2460"}],"title":"4. Document Policy Integration"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
 "bd736ec6": {"dfnID":"bd736ec6","dfnText":"top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-top-level-traversable"}],"title":"3. Crash Reports"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
 "c6d6dab1": {"dfnID":"c6d6dab1","dfnText":"visibilityState","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-document-visibilitystate"}],"title":"3. Crash Reports"}],"url":"https://html.spec.whatwg.org/multipage/interaction.html#dom-document-visibilitystate"},
 "ccd8b64e": {"dfnID":"ccd8b64e","dfnText":"configuration point","external":true,"refSections":[{"refs":[{"id":"ref-for-configuration-point"}],"title":"4. Document Policy Integration"}],"url":"https://wicg.github.io/document-policy/#configuration-point"},
 "cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
-"crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"}],"url":"#crash-reports"},
+"crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crash-reports\u2462"},{"id":"ref-for-crash-reports\u2463"},{"id":"ref-for-crash-reports\u2464"},{"id":"ref-for-crash-reports\u2465"}],"title":"3.1. Crash Reports Delivery Priority"}],"url":"#crash-reports"},
 "crashreportbody": {"dfnID":"crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody"}],"title":"3. Crash Reports"}],"url":"#crashreportbody"},
 "crashreportbody-is_top_level": {"dfnID":"crashreportbody-is_top_level","dfnText":"is_top_level","external":false,"refSections":[],"url":"#crashreportbody-is_top_level"},
 "crashreportbody-page_visibility": {"dfnID":"crashreportbody-page_visibility","dfnText":"page_visibility","external":false,"refSections":[],"url":"#crashreportbody-page_visibility"},
