@@ -1,4 +1,4 @@
-# Crash Storage API Explainer
+# Crash Report Storage API Explainer
 
 ## Participate
 
@@ -30,13 +30,13 @@ server—possibly through a mechanism like Web Sockets trying to represent a liv
 when sessions were terminated abruptly due to an OS process crash, and analyze any recorded
 application state *in only those cases*.
 
-The Crash Storage API aims to fill this gap by allowing applications to record relevant data
-throughout the lifetime of a user's session, and is sent to developers only after a crash is
+The *web-exposed* Crash Report API aims to fill this gap by allowing applications to record relevant
+data throughout the lifetime of a user's session, and is sent to developers only after a crash is
 encountered.
 
 ### Proposal
 
-The Crash Storage API (currently proposed as `window.crashStorage`) is an extension of the Crash
+The Crash Report API (currently proposed as `window.crashReport`) is an extension of the Crash
 Reporting API, offering developers a web-exposed key-value store to record arbitrary application
 state that gets attached to the
 [`CrashReportBody`](https://wicg.github.io/crash-reporting/#crashreportbody)
@@ -44,62 +44,80 @@ that gets sent to the developer endpoint. As a web application engages with the 
 different ways throughout the user's session, this API lets developers track what actions or state
 in their app might be causing a crash.
 
-By providing a dedicated storage interface that gets attached to crash reports, developers can
-capture essential information leading up to a crash. This significantly increases the utility of the
-Crash Reporting API, giving developers the opportunity to debug each crash they encounter with more
-precision.
+By providing a dedicated interface whose backing store gets attached to crash reports, developers
+can capture essential information leading up to a crash. This significantly increases the utility of
+the server-destined crash reports, giving developers the opportunity to debug each crash they
+encounter with more precision.
 
 ### Detailed design
 
-The interface of choice for arbitrary key-value storage on the web platform is the
-[`Storage` interface](https://html.spec.whatwg.org/multipage/webstorage.html#the-storage-interface),
-and the Crash Storage API reuses this generic frontend for the crash-specific storage backend.
+We propose a straightforward `CrashReportStorage` Web IDL interface, with a key/value setter, and
+removal method:
+
+```js
+[Exposed=Window]
+interface CrashReportStorage {
+  void set(DOMString key, DOMString value);
+  void remove(DOMString key);
+};
+```
+
+Both `set()` and `remove()` are synchronous, and expected to be implemented either by a backing blob
+of shared memory that spans between the crashing process and the process that reports on its crash,
+a synchronous IPC call, or some other equivalently reliable mechanism.
+
+> [!NOTE]
+> Note that while synchronous storage APIs are discouraged on the web platform, this API is not a
+> storage API. The backing store's scope is restricted to the current `Document`, there is no
+> getter, and for this API to be maximally useful and ergonomic, it must be a suitable one-line
+> drop-in, in a potentially-crashy synchronous block of code. If the API were Promise-based and
+> therefore asynchronous, it becomes invasive to the surrounding code that it helps debug, by
+> introducing asynchronicity that may alter the application's ability to reproduce the suspected
+> crash.
 
 **Scoping**
 
-At a high level, the scoping and lifetime of data in the Crash Storage API is the same as session
-storage, in that it is
-[scoped to the traversable navigable](https://storage.spec.whatwg.org/#traversable-navigable-storage-shed),
-as opposed to the user agent's storage shed, like `localStorage`. This proposal entails creating a new
-[registered storage endpoint](https://storage.spec.whatwg.org/#registered-storage-endpoints).
+The scope of key-value map backing the `CrashReportStorage` interface is Document-bound. Because it
+is 1:1 with a Document, storage partitioning considerations that are relevant for other traditional
+"storage" APIs are not necessary—this API is just additional Document state.
 
 **Refresh persistence**
 
-One difference between `crashStorage` and `sessionStorage` is that while `sessionStorage` data
-persists across page refreshes in a traversable navigable, `crashStorage` data does not need this
+One difference between `crashReport` and `sessionStorage` is that while `sessionStorage` data
+persists across page refreshes in a traversable navigable, `crashReport` data does not need this
 level of persistence, and may in fact benefit from being more ephemeral than `sessionStorage`.
 However the exact policy we land on is TBD.
 
-**Which crash reports get access to `crashStorage` data?**
+**Which crash reports get access to `crashReport` data?**
 
 [Issue #24](https://github.com/WICG/crash-reporting/issues/24) poses an open question relating to
-the scope of `crashStorage` data, and asks: which Documents actually send crash reports, when a
+the scope of `crashReport` data, and asks: which Documents actually send crash reports, when a
 process hosting multiple same-origin Documents crashes? Because it is not always possible to
 determine which Document in a process caused a given crash, the running idea is that the Crash
 Reporting API should specify that the topmost Document for a given origin should generate a
 `CrashReportBody` with context from *that* document.
 
-It is important to consider how this interplays with the scoping of `crashStorage` data. Many web
+It is important to consider how this interplays with the scoping of `crashReport` data. Many web
 applications are structured in a way where the top-level Document is merely a thin host for a suite
 of same-origin iframes that primarily drive the application. In these applications, it is more
 likely that a same-origin iframe caused a crash than the top-level Document, and if a crash report
 gets generated **only** for the top-level Document, it is crucial that it includes any data put in
-the `crashStorage` API by iframes in the same-origin, as to not silently ignore any important
+the `crashReport` API by iframes in the same-origin, as to not silently ignore any important
 developer-provided context.
 
 ## Usage
 
-From a JavaScript developer's perspective, the `crashStorage` API looks and feels just like
+From a JavaScript developer's perspective, the `crashReport` API looks and feels just like
 `sessionStorage` or `localStorage` (but with any aforementioned considerations above). Below is an
-example of how a developer might use the `crashStorage` API` to debug a complex operation that they
+example of how a developer might use the `crashReport` API` to debug a complex operation that they
 suspect is leading to crashes.
 
 ```js
-window.crashStorage.setItem('complex-operation-input', String(arg1 + arg2));
+window.crashReport.set('complex-operation-input', String(arg1 + arg2));
 // If the following operation crashes, then its inputs will be sent in a `CrashReportBody` to the
 default endpoint.
 complexOperationThatMightCrash(arg1, arg2);
-window.crashStorage.removeItem('complex-operation-input');
+window.crashReport.remove('complex-operation-input');
 ```
 
 Note that because crash storage data is accessible among all same-origin Documents under a
@@ -110,16 +128,34 @@ invoke that path at different times.
 
 To record which specific `fetch()` is happening at a given time to help narrow down the culprit, a
 developer might adopt a prefixing strategy to prevent clobbering the same state in the
-`crashStorage` API:
+`crashReport` API:
 
 ```js
 // Code that runs in multiple Documents.
 function fetchURL(url) {
   const prefix = `[top-level=${self === window.top}]`;
-  window.crashStorage.set(`${prefix}-fetching`, url);
+  window.crashReport.set(`${prefix}-fetching`, url);
   const response = await fetch(url);
 }
 ```
+
+## Alternatives considered
+
+Initially we proposed this API as a new storage API, inheriting from the
+[`Storage` interface](https://html.spec.whatwg.org/multipage/webstorage.html#the-storage-interface),
+as this is the interface of choice for arbitrary key-value storage on the web platform.
+
+Under this proposal, the scoping and lifetime of data in the Crash Storage API is the same as
+session storage, in that it is
+[scoped to the traversable navigable](https://storage.spec.whatwg.org/#traversable-navigable-storage-shed),
+as opposed to the user agent's storage shed, like `localStorage`. This version of the proposal
+entails creating a new
+[registered storage endpoint](https://storage.spec.whatwg.org/#registered-storage-endpoints).
+
+After consulting with storage experts, it didn't make sense to treat this API as a traditional
+"storage" API, since it didn't have the same scoping and quota requirements, and isn't intended to
+have a "getter" to retrieve values—it's a simple one-way dumping ground for diagnostic data that the
+browser internals care about.
 
 ## User needs
 
@@ -127,14 +163,14 @@ The crashes that our proposal helps developers debug are not caused by faulty we
 applications—rather, faulty web browser implementations—but web app developers can respond to
 crashes and bugs in the platform much faster than browsers can, given complex release cycles.
 
-Therefore, the Crash Storage API lets developers greatly improve user experience by reducing user
+Therefore, the Crash Report API lets developers greatly improve user experience by reducing user
 exposure to common crashing scenarios before they can be fixed by browser engineers independently.
 This increases the overall stability of the web platform, leading to less loss of user data and poor
 experience.
 
 ## Security and privacy concerns
 
-TODO: Add `crashStorage`-specific security and privacy notes, distinct from
+TODO: Add `crashReport`-specific security and privacy notes, distinct from
 https://wicg.github.io/crash-reporting/#security and
 https://wicg.github.io/crash-reporting/#privacy, and the questionnaire below.
 
@@ -155,11 +191,11 @@ We believe so, yes.
 > 2.3. Do the features in your specification expose personal information, personally-identifiable information (PII), or information derived from either?
 
 The feature does not expose any PII. However it is possible for developers to inject PII that they
-collect from their app, into the `crashStorage` API, and thus into crash report bodies.
+collect from their app, into the `crashReport` API, and thus into crash report bodies.
 
 > 2.4. How do the features in your specification deal with sensitive information?
 
-All data inserted into the `crashStorage` API is treated the same, and the data can only come from
+All data inserted into the `crashReport` API is treated the same, and the data can only come from
 what the web app developer already has access to.
 
 > 2.5. Does data exposed by your specification carry related but distinct information that may not be obvious to users?
@@ -205,7 +241,7 @@ can with other storage or even networking APIs.
 
 > 2.14. How does this specification distinguish between behavior in first-party and third-party contexts?
 
-Like `sessionStorage`, storage in the `crashStorage` API is scoped to an origin under a traversable
+Like `sessionStorage`, storage in the `crashReport` API is scoped to an origin under a traversable
 navigable. Therefore, while there is no distinction in how the API *behaves* in first-party or
 third-party contexts, data is isolated along this boundary, per the security model of the web
 platform.
