@@ -170,9 +170,28 @@ experience.
 
 ## Security and privacy concerns
 
-TODO: Add `crashReport`-specific security and privacy notes, distinct from
-https://wicg.github.io/crash-reporting/#security and
-https://wicg.github.io/crash-reporting/#privacy, and the questionnaire below.
+One possible vector for concern about this API is that it gives malicious websites the ability to
+refine exploits and make them more reliable in the wild. Example: assume an attacker owns both
+Evil.com and EvilIframe.com, and tricks a user into visiting Evil.com. Evil.com can host
+EvilIframe.com in an iframe, which can try out various exploits that often crash the hosting
+renderer process when they fail.
+
+In browsers with site isolation, Evil.com can "retry" the exploit in EvilIframe.com over and over
+again. And if EvilIframe.com uses the `window.crashReport` API to record details about the
+parameters of its exploit attempts, it becomes easier for EvilIframe.com to quickly adjust its
+parameters on the fly and create a more robust, reliable exploit with the help of this API. Without
+this API, Evil.com might not have insight into what specifically caused the iframe crash, and
+therefore cannot direct future attempts at the same exploit.
+
+While the `window.crashReport` API might help facilitate this scenario, it's likely that Evil.com
+and EvilIframe.com can already collude in an equivalent way to get the same results. Specific
+parameters of EvilIframe's exploit attempts can already be communicated asynchronously back to its
+own servers via WebSockets, or to Evil.com itself via `postMessage()`, and the event of a crash can
+also be observed indirectly, with some effort, through these tools.
+
+Therefore, this API doesn't expose any information that isn't already available without some effort.
+The security concern is that the same ergonomic benefits that allow legitimate developers to debug
+their own crashes may also extend to attackers, and their ability to create more robust exploits.
 
 ----
 
