@@ -51,18 +51,23 @@ encounter with more precision.
 
 ### Detailed design
 
-We propose a straightforward `CrashReportStorage` Web IDL interface, with a key/value setter, and
+We propose a straightforward `CrashReportContext` Web IDL interface, with a key/value setter, and
 removal method:
 
 ```js
 [Exposed=Window]
-interface CrashReportStorage {
+interface CrashReportContext {
+  Promise<undefined> initialize(unsigned long long length);
   void set(DOMString key, DOMString value);
-  void remove(DOMString key);
+  void delete(DOMString key);
 };
 ```
 
-Both `set()` and `remove()` are synchronous, and expected to be implemented either by a backing blob
+The `initialize()` method must be called before either `set()` or `delete()`, and provides the
+implementation with the ability to asynchronously initialize any backing memory that is used for the
+crash report data supplied via `set()`.
+
+Both `set()` and `delete()` are synchronous, and expected to be implemented either by a backing blob
 of shared memory that spans between the crashing process and the process that reports on its crash,
 a synchronous IPC call, or some other equivalently reliable mechanism.
 
@@ -77,7 +82,7 @@ a synchronous IPC call, or some other equivalently reliable mechanism.
 
 **Scoping**
 
-The scope of key-value map backing the `CrashReportStorage` interface is Document-bound. Because it
+The scope of key-value map backing the `CrashReportContext` interface is Document-bound. Because it
 is 1:1 with a Document, storage partitioning considerations that are relevant for other traditional
 "storage" APIs are not necessary—this API is just additional Document state.
 
@@ -117,7 +122,7 @@ window.crashReport.set('complex-operation-input', String(arg1 + arg2));
 // If the following operation crashes, then its inputs will be sent in a `CrashReportBody` to the
 default endpoint.
 complexOperationThatMightCrash(arg1, arg2);
-window.crashReport.remove('complex-operation-input');
+window.crashReport.delete('complex-operation-input');
 ```
 
 Note that because crash storage data is accessible among all same-origin Documents under a
