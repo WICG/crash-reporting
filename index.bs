@@ -131,7 +131,7 @@ receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.
 
-[=Crash Reports=] Delivery Priority
+[=Crash Reports=] Delivery Priority {#delivery-priority}
 -----------------------------------
 If a `crash-reporting` [=endpoint=] is specified, [=crash reports=] are delivered to it.
 

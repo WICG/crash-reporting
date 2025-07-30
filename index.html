@@ -4,9 +4,9 @@
   <title>Crash Reporting</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
+  <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="4327929e46252daf38be8e7369650d8c9f93ccff" name="revision">
+  <meta content="0887180dfbc6f48d59185de42541c4087812789a" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -693,7 +693,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Crash Reporting</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-30">30 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-07-30">30 July 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -746,7 +746,7 @@ through the use of the Reporting API.</p>
     <li>
      <a href="#crash-report"><span class="secno">3</span> <span class="content">Crash Reports</span></a>
      <ol class="toc">
-      <li><a href="#crash-reports-delivery-priority"><span class="secno">3.1</span> <span class="content"><span>Crash Reports</span> Delivery Priority</span></a>
+      <li><a href="#delivery-priority"><span class="secno">3.1</span> <span class="content"><span>Crash Reports</span> Delivery Priority</span></a>
      </ol>
     <li><a href="#document-policy"><span class="secno">4</span> <span class="content">Document Policy Integration</span></a>
     <li>
@@ -807,7 +807,7 @@ optionally the reason for the crash (such as "oom").</p>
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DocumentVisibilityState?" id="dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></dfn>;
 };
 </pre>
-   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
+   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
@@ -853,12 +853,12 @@ visible at all, or fully occluded.</p>
 receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.</p>
-   <h3 class="heading settled" data-level="3.1" id="crash-reports-delivery-priority"><span class="secno">3.1. </span><span class="content"><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports③">Crash Reports</a> Delivery Priority</span><a class="self-link" href="#crash-reports-delivery-priority"></a></h3>
-    If a <code>crash-reporting</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports④">crash reports</a> are delivered to it.
+   <h3 class="heading settled" data-level="3.1" id="delivery-priority"><span class="secno">3.1. </span><span class="content"><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports③">Crash Reports</a> Delivery Priority</span><a class="self-link" href="#delivery-priority"></a></h3>
+    If a <code>crash-reporting</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports④">crash reports</a> are delivered to it. 
    <p>Otherwise, if a <code>default</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint①">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑤">crash reports</a> are delivered to it.</p>
    <p>If neither <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint②">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑥">crash reports</a> are not delivered.</p>
    <div class="example" id="example-8ab2445e">
-    <a class="self-link" href="#example-8ab2445e"></a>
+    <a class="self-link" href="#example-8ab2445e"></a> 
 <pre>Reporting-Endpoints: crash-reporting="https://example.com/reports"
 </pre>
    </div>
@@ -1649,7 +1649,7 @@ let refsData = {
 "https://w3c.github.io/reporting/#report": {"displayText":"report","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report","type":"dfn","url":"https://w3c.github.io/reporting/#report"},
 "https://w3c.github.io/reporting/#report-body": {"displayText":"body","export":true,"for_":["report"],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"body","type":"dfn","url":"https://w3c.github.io/reporting/#report-body"},
 "https://w3c.github.io/reporting/#report-type": {"displayText":"report type","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report type","type":"dfn","url":"https://w3c.github.io/reporting/#report-type"},
-"https://w3c.github.io/reporting/#reportbody": {"displayText":"ReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"ReportBody","type":"interface","url":"https://w3c.github.io/reporting/#reportbody"},
+"https://w3c.github.io/reporting/#reportbody": {"displayText":"ReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"ReportBody","type":"dictionary","url":"https://w3c.github.io/reporting/#reportbody"},
 "https://webidl.spec.whatwg.org/#Default": {"displayText":"Default","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Default","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Default"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
