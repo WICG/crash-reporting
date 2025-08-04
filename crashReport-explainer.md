@@ -90,7 +90,7 @@ However the exact policy we land on is TBD.
 
 **Which crash reports get access to `crashReport` data?**
 
-[Issue #24](https://github.com/WICG/crash-reporting/issues/24) poses an open question relating to
+[Issue #25](https://github.com/WICG/crash-reporting/issues/25) poses an open question relating to
 the scope of `crashReport` data, and asks: which Documents actually send crash reports, when a
 process hosting multiple same-origin Documents crashes? Because it is not always possible to
 determine which Document in a process caused a given crash, the running idea is that the Crash
