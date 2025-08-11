@@ -4,9 +4,9 @@
   <title>Crash Reporting</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
+  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="0887180dfbc6f48d59185de42541c4087812789a" name="revision">
+  <meta content="2ce27fddee24f4190a3f107f908fa6a9c0bb6dc6" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -693,7 +693,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Crash Reporting</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-07-30">30 July 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-08-18">18 August 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -798,16 +798,14 @@ for a unique identifier (which can be interpreted by the browser vendor), and
 optionally the reason for the crash (such as "oom").</p>
    <p><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports">Crash reports</a> are a type of <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report" id="ref-for-report">report</a>.</p>
    <p><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports①">Crash reports</a> have the <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-type" id="ref-for-report-type">report type</a> "crash".</p>
-<pre class="idl exclude highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
-<c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="crashreportbody"><code><c- g>CrashReportBody</c-></code></dfn> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody" id="ref-for-reportbody"><c- n>ReportBody</c-></a> {
-  [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default" id="ref-for-Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object"><c- b>object</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="method" data-export data-lt="toJSON()" id="dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></dfn>();
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DOMString?" id="dom-crashreportbody-stack"><code><c- g>stack</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="boolean?" id="dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="attribute" data-export data-readonly data-type="DocumentVisibilityState?" id="dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></dfn>;
+<pre class="idl exclude highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-crashreportbody"><code><c- g>CrashReportBody</c-></code></dfn> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody" id="ref-for-reportbody"><c- n>ReportBody</c-></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-crashreportbody-stack"><code><c- g>stack</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></dfn>;
+  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DocumentVisibilityState" id="dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></dfn>;
 };
 </pre>
-   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>'s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#crashreportbody" id="ref-for-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
+   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#dictdef-crashreportbody" id="ref-for-dictdef-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
@@ -922,33 +920,32 @@ reporting specifically.</p>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#crashreportbody">CrashReportBody</a><span>, in § 3</span>
+   <li><a href="#dictdef-crashreportbody">CrashReportBody</a><span>, in § 3</span>
    <li><a href="#crash-reports">Crash reports</a><span>, in § 3</span>
    <li>
     is_top_level
     <ul>
-     <li><a href="#dom-crashreportbody-is_top_level">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-is_top_level">dfn for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#dom-crashreportbody-is_top_level">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
    <li>
     page_visibility
     <ul>
-     <li><a href="#dom-crashreportbody-page_visibility">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-page_visibility">dfn for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#dom-crashreportbody-page_visibility">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
    <li>
     reason
     <ul>
-     <li><a href="#dom-crashreportbody-reason">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-reason">dfn for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#dom-crashreportbody-reason">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
    <li>
     stack
     <ul>
-     <li><a href="#dom-crashreportbody-stack">attribute for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#crashreportbody-stack">dfn for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#dom-crashreportbody-stack">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
-   <li><a href="#dom-crashreportbody-tojson">toJSON()</a><span>, in § 3</span>
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
@@ -988,10 +985,7 @@ reporting specifically.</p>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="8855a9aa">DOMString</span>
-     <li><span class="dfn-paneled" id="f4531911">Default</span>
-     <li><span class="dfn-paneled" id="889e932f">Exposed</span>
      <li><span class="dfn-paneled" id="5372cca8">boolean</span>
-     <li><span class="dfn-paneled" id="efd1ec5d">object</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -1009,13 +1003,11 @@ reporting specifically.</p>
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
-<c- b>interface</c-> <a href="#crashreportbody"><code><c- g>CrashReportBody</c-></code></a> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody"><c- n>ReportBody</c-></a> {
-  [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Default"><c- g>Default</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-object"><c- b>object</c-></a> <a href="#dom-crashreportbody-tojson"><code><c- g>toJSON</c-></code></a>();
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-reason"><code><c- g>reason</c-></code></a>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>? <a data-readonly data-type="DOMString?" href="#dom-crashreportbody-stack"><code><c- g>stack</c-></code></a>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a>? <a data-readonly data-type="boolean?" href="#dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></a>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a>? <a data-readonly data-type="DocumentVisibilityState?" href="#dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></a>;
+<pre class="idl highlight def"><c- b>dictionary</c-> <a href="#dictdef-crashreportbody"><code><c- g>CrashReportBody</c-></code></a> : <a data-link-type="idl-name" href="https://w3c.github.io/reporting/#reportbody"><c- n>ReportBody</c-></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-crashreportbody-reason"><code><c- g>reason</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-crashreportbody-stack"><code><c- g>stack</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></a>;
+  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <a data-type="DocumentVisibilityState" href="#dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></a>;
 };
 
 </pre>
@@ -1225,7 +1217,6 @@ let dfnPanelData = {
 "84afeaae": {"dfnID":"84afeaae","dfnText":"Error.prototype.stack","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-get-error.prototype-stack"}],"title":"3. Crash Reports"}],"url":"https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack"},
 "85394472": {"dfnID":"85394472","dfnText":"Document","external":true,"refSections":[{"refs":[{"id":"ref-for-document"},{"id":"ref-for-document\u2460"},{"id":"ref-for-document\u2461"}],"title":"3. Crash Reports"}],"url":"https://dom.spec.whatwg.org/#document"},
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
-"889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "8b488914": {"dfnID":"8b488914","dfnText":"DocumentVisibilityState","external":true,"refSections":[{"refs":[{"id":"ref-for-documentvisibilitystate"},{"id":"ref-for-documentvisibilitystate\u2460"}],"title":"3. Crash Reports"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"},
 "9239678f": {"dfnID":"9239678f","dfnText":"endpoint","external":true,"refSections":[{"refs":[{"id":"ref-for-endpoint"},{"id":"ref-for-endpoint\u2460"},{"id":"ref-for-endpoint\u2461"}],"title":"3.1. Crash Reports Delivery Priority"}],"url":"https://w3c.github.io/reporting/#endpoint"},
 "9fe8836b": {"dfnID":"9fe8836b","dfnText":"report","external":true,"refSections":[{"refs":[{"id":"ref-for-report"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report"},
@@ -1235,18 +1226,15 @@ let dfnPanelData = {
 "ccd8b64e": {"dfnID":"ccd8b64e","dfnText":"configuration point","external":true,"refSections":[{"refs":[{"id":"ref-for-configuration-point"}],"title":"4. Document Policy Integration"}],"url":"https://wicg.github.io/document-policy/#configuration-point"},
 "cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
 "crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crash-reports\u2462"},{"id":"ref-for-crash-reports\u2463"},{"id":"ref-for-crash-reports\u2464"},{"id":"ref-for-crash-reports\u2465"}],"title":"3.1. Crash Reports Delivery Priority"}],"url":"#crash-reports"},
-"crashreportbody": {"dfnID":"crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody"}],"title":"3. Crash Reports"}],"url":"#crashreportbody"},
 "crashreportbody-is_top_level": {"dfnID":"crashreportbody-is_top_level","dfnText":"is_top_level","external":false,"refSections":[],"url":"#crashreportbody-is_top_level"},
 "crashreportbody-page_visibility": {"dfnID":"crashreportbody-page_visibility","dfnText":"page_visibility","external":false,"refSections":[],"url":"#crashreportbody-page_visibility"},
 "crashreportbody-reason": {"dfnID":"crashreportbody-reason","dfnText":"reason","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-reason"},{"id":"ref-for-crashreportbody-reason\u2460"},{"id":"ref-for-crashreportbody-reason\u2461"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-reason"},
 "crashreportbody-stack": {"dfnID":"crashreportbody-stack","dfnText":"stack","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-stack"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-stack"},
+"dictdef-crashreportbody": {"dfnID":"dictdef-crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-crashreportbody"}],"title":"3. Crash Reports"}],"url":"#dictdef-crashreportbody"},
 "dom-crashreportbody-is_top_level": {"dfnID":"dom-crashreportbody-is_top_level","dfnText":"is_top_level","external":false,"refSections":[],"url":"#dom-crashreportbody-is_top_level"},
 "dom-crashreportbody-page_visibility": {"dfnID":"dom-crashreportbody-page_visibility","dfnText":"page_visibility","external":false,"refSections":[],"url":"#dom-crashreportbody-page_visibility"},
 "dom-crashreportbody-reason": {"dfnID":"dom-crashreportbody-reason","dfnText":"reason","external":false,"refSections":[],"url":"#dom-crashreportbody-reason"},
 "dom-crashreportbody-stack": {"dfnID":"dom-crashreportbody-stack","dfnText":"stack","external":false,"refSections":[],"url":"#dom-crashreportbody-stack"},
-"dom-crashreportbody-tojson": {"dfnID":"dom-crashreportbody-tojson","dfnText":"toJSON","external":false,"refSections":[],"url":"#dom-crashreportbody-tojson"},
-"efd1ec5d": {"dfnID":"efd1ec5d","dfnText":"object","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-object"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#idl-object"},
-"f4531911": {"dfnID":"f4531911","dfnText":"Default","external":true,"refSections":[{"refs":[{"id":"ref-for-Default"}],"title":"3. Crash Reports"}],"url":"https://webidl.spec.whatwg.org/#Default"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -1636,9 +1624,9 @@ function genLinkingSyntaxes(dfn) {
 {
 let refsData = {
 "#crash-reports": {"displayText":"crash reports","export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"crash reports","type":"dfn","url":"#crash-reports"},
-"#crashreportbody": {"displayText":"CrashReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"CrashReportBody","type":"interface","url":"#crashreportbody"},
 "#crashreportbody-reason": {"displayText":"reason","export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"reason","type":"dfn","url":"#crashreportbody-reason"},
 "#crashreportbody-stack": {"displayText":"stack","export":true,"for_":["CrashReportBody"],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"stack","type":"dfn","url":"#crashreportbody-stack"},
+"#dictdef-crashreportbody": {"displayText":"CrashReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"crash-reporting","spec":"crash-reporting-1","status":"local","text":"CrashReportBody","type":"dictionary","url":"#dictdef-crashreportbody"},
 "https://dom.spec.whatwg.org/#concept-document": {"displayText":"document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
 "https://dom.spec.whatwg.org/#document": {"displayText":"Document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Document","type":"interface","url":"https://dom.spec.whatwg.org/#document"},
 "https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable": {"displayText":"top-level traversable","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"top-level traversable","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
@@ -1650,11 +1638,8 @@ let refsData = {
 "https://w3c.github.io/reporting/#report-body": {"displayText":"body","export":true,"for_":["report"],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"body","type":"dfn","url":"https://w3c.github.io/reporting/#report-body"},
 "https://w3c.github.io/reporting/#report-type": {"displayText":"report type","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"report type","type":"dfn","url":"https://w3c.github.io/reporting/#report-type"},
 "https://w3c.github.io/reporting/#reportbody": {"displayText":"ReportBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"reporting","spec":"reporting-1","status":"current","text":"ReportBody","type":"dictionary","url":"https://w3c.github.io/reporting/#reportbody"},
-"https://webidl.spec.whatwg.org/#Default": {"displayText":"Default","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Default","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Default"},
-"https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "https://webidl.spec.whatwg.org/#idl-boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
-"https://webidl.spec.whatwg.org/#idl-object": {"displayText":"object","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"object","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-object"},
 "https://wicg.github.io/document-policy/#configuration-point": {"displayText":"configuration point","export":true,"for_":[],"level":"1","normative":true,"shortname":"document-policy","spec":"document-policy","status":"current","text":"configuration point","type":"dfn","url":"https://wicg.github.io/document-policy/#configuration-point"},
 };
 
