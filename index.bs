@@ -71,13 +71,11 @@ optionally the reason for the crash (such as "oom").
 [=Crash reports=] have the [=report type=] "crash".
 
 <xmp class="idl exclude">
-[Exposed=(Window,Worker)]
-interface CrashReportBody : ReportBody {
-  [Default] object toJSON();
-  readonly attribute DOMString? reason;
-  readonly attribute DOMString? stack;
-  readonly attribute boolean? is_top_level;
-  readonly attribute DocumentVisibilityState? page_visibility;
+dictionary CrashReportBody : ReportBody {
+  DOMString reason;
+  DOMString stack;
+  boolean is_top_level;
+  DocumentVisibilityState page_visibility;
 };
 </xmp>
 
