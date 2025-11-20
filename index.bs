@@ -75,7 +75,7 @@ dictionary CrashReportBody : ReportBody {
   DOMString reason;
   DOMString stack;
   boolean is_top_level;
-  DocumentVisibilityState page_visibility;
+  DocumentVisibilityState visibility_state;
 };
 </xmp>
 
@@ -118,7 +118,7 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
 * <dfn for="CrashReportBody" noexport>is_top_level</dfn>: A boolean representing
   whether the {{Document}} that crashed belonged to a [=/top-level traversable=], or not.
 
-* <dfn for="CrashReportBody" noexport>page_visibility</dfn>: The string value
+* <dfn for="CrashReportBody" noexport>visibility_state</dfn>: The string value
   "<code>visible</code>" or "<code>hidden</code>", matching the {{DocumentVisibilityState}}
   enum that is exposed to the web platform, via {{Document}}.{{Document/visibilityState}}.
   It represents whether the visual viewport that the crashed {{Document}} was hosted in was

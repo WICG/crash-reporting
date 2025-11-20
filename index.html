@@ -4,9 +4,9 @@
   <title>Crash Reporting</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
+  <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://wicg.github.io/crash-reporting/" rel="canonical">
-  <meta content="2ce27fddee24f4190a3f107f908fa6a9c0bb6dc6" name="revision">
+  <meta content="e2da536714581ff768a9e6327aed62e2424056a7" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -693,7 +693,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Crash Reporting</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-08-18">18 August 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
+    <time class="dt-updated" datetime="2025-11-20">20 November 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -708,7 +709,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    </div>
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 the Contributors to the Crash Reporting Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
-A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
+A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available.
+</p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -719,12 +721,17 @@ through the use of the Reporting API.</p>
   <div data-fill-with="at-risk"></div>
   <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
-   <p> This specification was published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
+   <p>
+  This specification was published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
   It is not a W3C Standard nor is it on the W3C Standards Track.
 
-  Please note that under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
+  Please note that under the
+  <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>
+  there is a limited opt-out and other conditions apply.
 
-  Learn more about <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>. </p>
+  Learn more about
+  <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>.
+</p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -780,9 +787,12 @@ through the use of the Reporting API.</p>
    <p>[INTRODUCTION GOES HERE]</p>
    <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
    <div class="example" id="example-eb0762af">
-    <a class="self-link" href="#example-eb0762af"></a> Unstable, Inc. wants to understand better how often its website is crashing in
+    <a class="self-link" href="#example-eb0762af"></a>
+  Unstable, Inc. wants to understand better how often its website is crashing in
   the wild. It can do this by delivering the following header to define a
-  default reporting endpoint, which will direct crash reports there: 
+  default reporting endpoint, which will direct crash reports there:
+
+  
 <pre>Reporting-Endpoints: default="https://example.com/reports"
 </pre>
    </div>
@@ -802,14 +812,16 @@ optionally the reason for the crash (such as "oom").</p>
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-crashreportbody-reason"><code><c- g>reason</c-></code></dfn>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-crashreportbody-stack"><code><c- g>stack</c-></code></dfn>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></dfn>;
-  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DocumentVisibilityState" id="dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></dfn>;
+  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="CrashReportBody" data-dfn-type="dict-member" data-export data-type="DocumentVisibilityState" id="dom-crashreportbody-visibility_state"><code><c- g>visibility_state</c-></code></dfn>;
 };
 </pre>
-   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by <code class="idl"><a data-link-type="idl" href="#dictdef-crashreportbody" id="ref-for-dictdef-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
+   <p>A <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports②">crash report</a>’s <a data-link-type="dfn" href="https://w3c.github.io/reporting/#report-body" id="ref-for-report-body">body</a>, represented in JavaScript by
+<code class="idl"><a data-link-type="idl" href="#dictdef-crashreportbody" id="ref-for-dictdef-crashreportbody">CrashReportBody</a></code>, contains the following fields:</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-reason">reason</dfn>: A more specific classification of the
-type of crash that occured, if known, or omitted otherwise. The valid <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason">reason</a> strings are shown below.</p>
+type of crash that occured, if known, or omitted otherwise. The valid
+<a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason">reason</a> strings are shown below.</p>
    </ul>
    <table border="1" cellpadding="5px" style="border-collapse: collapse;">
     <tbody>
@@ -832,7 +844,8 @@ true, or omitted otherwise:</p>
       <li data-md>
        <p>The crash <a data-link-type="dfn" href="#crashreportbody-reason" id="ref-for-crashreportbody-reason②">reason</a> is "unresponsive".</p>
       <li data-md>
-       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">Document</a> which crashed is <code>true</code>.</p>
+       <p>The policy value for <code>include-js-call-stacks-in-crash-reports</code> in the
+<a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">Document</a> which crashed is <code>true</code>.</p>
       <li data-md>
        <p>The call stack can be recovered from the crashed document.</p>
      </ul>
@@ -842,8 +855,9 @@ same as that used by the <a data-link-type="dfn" href="https://tc39.es/proposal-
      <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-is_top_level">is_top_level</dfn>: A boolean representing
 whether the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> that crashed belonged to a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable">top-level traversable</a>, or not.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-page_visibility">page_visibility</dfn>: The string value
-"<code>visible</code>" or "<code>hidden</code>", matching the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate①">DocumentVisibilityState</a></code> enum that is exposed to the web platform, via <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/interaction.html#dom-document-visibilitystate" id="ref-for-dom-document-visibilitystate">visibilityState</a></code>.
+     <p><dfn class="dfn-paneled" data-dfn-for="CrashReportBody" data-dfn-type="dfn" data-noexport id="crashreportbody-visibility_state">visibility_state</dfn>: The string value
+"<code>visible</code>" or "<code>hidden</code>", matching the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate" id="ref-for-documentvisibilitystate①">DocumentVisibilityState</a></code>
+enum that is exposed to the web platform, via <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/interaction.html#dom-document-visibilitystate" id="ref-for-dom-document-visibilitystate">visibilityState</a></code>.
 It represents whether the visual viewport that the crashed <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> was hosted in was
 visible at all, or fully occluded.</p>
    </ul>
@@ -852,23 +866,29 @@ receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
 whose serialization can be embedded in the out-of-band reports.</p>
    <h3 class="heading settled" data-level="3.1" id="delivery-priority"><span class="secno">3.1. </span><span class="content"><a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports③">Crash Reports</a> Delivery Priority</span><a class="self-link" href="#delivery-priority"></a></h3>
-    If a <code>crash-reporting</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports④">crash reports</a> are delivered to it. 
+   
+If a <code>crash-reporting</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports④">crash reports</a> are delivered to it.
+
+
    <p>Otherwise, if a <code>default</code> <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint①">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑤">crash reports</a> are delivered to it.</p>
    <p>If neither <a data-link-type="dfn" href="https://w3c.github.io/reporting/#endpoint" id="ref-for-endpoint②">endpoint</a> is specified, <a data-link-type="dfn" href="#crash-reports" id="ref-for-crash-reports⑥">crash reports</a> are not delivered.</p>
    <div class="example" id="example-8ab2445e">
-    <a class="self-link" href="#example-8ab2445e"></a> 
+    <a class="self-link" href="#example-8ab2445e"></a>
+  
 <pre>Reporting-Endpoints: crash-reporting="https://example.com/reports"
 </pre>
    </div>
    <h2 class="heading settled" data-level="4" id="document-policy"><span class="secno">4. </span><span class="content">Document Policy Integration</span><a class="self-link" href="#document-policy"></a></h2>
    <p>Site authors may opt in to recording the JavaScript call stack with some
 reports.</p>
-   <p>This spec defines a <a data-link-type="dfn" href="https://wicg.github.io/document-policy/#configuration-point" id="ref-for-configuration-point">configuration point</a> with the name <code>include-js-call-stacks-in-crash-reports</code>. Its type is boolean, and its default
+   <p>This spec defines a <a data-link-type="dfn" href="https://wicg.github.io/document-policy/#configuration-point" id="ref-for-configuration-point">configuration point</a> with the name
+<code>include-js-call-stacks-in-crash-reports</code>. Its type is boolean, and its default
 value is <code>false</code>. When configured as <code>true</code> in a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document①">Document</a> for which crash
 reporting is enabled, this will cause a string representation of the JavaScript
 call stack, at the time of the crash, to be included in a crash report.</p>
    <div class="example" id="example-565177e8">
-    <a class="self-link" href="#example-565177e8"></a> 
+    <a class="self-link" href="#example-565177e8"></a>
+
 <pre class="http">Document-Policy: include-js-call-stacks-in-crash-reports</pre>
    </div>
    <h2 class="heading settled" data-level="5" id="implementation"><span class="secno">5. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
@@ -878,7 +898,8 @@ provides at most a best-efforts delivery mechanism. This is especially true when
 it comes to reporting crashes. There are probably always going to be certain
 crash conditions which simply cannot be reported on (for instance, if the crash
 occurs within the crash-monitoring code of the user agent, or if the computer
-hosting the user agent were to suddenly cease to exist). However, many crashes <em>can</em> be observed by modern browsers, and their immediate causes can be deduced.</p>
+hosting the user agent were to suddenly cease to exist). However, many crashes
+<em>can</em> be observed by modern browsers, and their immediate causes can be deduced.</p>
    <p>A user agent implementing crash reports SHOULD attempt to monitor documents for
 crashes in a way that will continue to function even when the process which is
 responsible for that document crashes, or is terminated by the operating system.</p>
@@ -887,7 +908,8 @@ reliability and robustness to specific crash causes, and this specification does
 not attempt to prescribe any particular such method.</p>
    <h2 class="heading settled" data-level="6" id="sample-reports"><span class="secno">6. </span><span class="content">Sample Reports</span><a class="self-link" href="#sample-reports"></a></h2>
    <div class="example" id="example-d65bd545">
-    <a class="self-link" href="#example-d65bd545"></a> 
+    <a class="self-link" href="#example-d65bd545"></a>
+
 <pre>POST /reports HTTP/1.1
 Host: example.com
 ...
@@ -929,12 +951,6 @@ reporting specifically.</p>
      <li><a href="#dom-crashreportbody-is_top_level">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
    <li>
-    page_visibility
-    <ul>
-     <li><a href="#crashreportbody-page_visibility">dfn for CrashReportBody</a><span>, in § 3</span>
-     <li><a href="#dom-crashreportbody-page_visibility">dict-member for CrashReportBody</a><span>, in § 3</span>
-    </ul>
-   <li>
     reason
     <ul>
      <li><a href="#crashreportbody-reason">dfn for CrashReportBody</a><span>, in § 3</span>
@@ -945,6 +961,12 @@ reporting specifically.</p>
     <ul>
      <li><a href="#crashreportbody-stack">dfn for CrashReportBody</a><span>, in § 3</span>
      <li><a href="#dom-crashreportbody-stack">dict-member for CrashReportBody</a><span>, in § 3</span>
+    </ul>
+   <li>
+    visibility_state
+    <ul>
+     <li><a href="#crashreportbody-visibility_state">dfn for CrashReportBody</a><span>, in § 3</span>
+     <li><a href="#dom-crashreportbody-visibility_state">dict-member for CrashReportBody</a><span>, in § 3</span>
     </ul>
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -1007,7 +1029,7 @@ reporting specifically.</p>
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-crashreportbody-reason"><code><c- g>reason</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-crashreportbody-stack"><code><c- g>stack</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-crashreportbody-is_top_level"><code><c- g>is_top_level</c-></code></a>;
-  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <a data-type="DocumentVisibilityState" href="#dom-crashreportbody-page_visibility"><code><c- g>page_visibility</c-></code></a>;
+  <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#documentvisibilitystate"><c- n>DocumentVisibilityState</c-></a> <a data-type="DocumentVisibilityState" href="#dom-crashreportbody-visibility_state"><code><c- g>visibility_state</c-></code></a>;
 };
 
 </pre>
@@ -1227,14 +1249,14 @@ let dfnPanelData = {
 "cf363990": {"dfnID":"cf363990","dfnText":"body","external":true,"refSections":[{"refs":[{"id":"ref-for-report-body"}],"title":"3. Crash Reports"}],"url":"https://w3c.github.io/reporting/#report-body"},
 "crash-reports": {"dfnID":"crash-reports","dfnText":"Crash reports","external":false,"refSections":[{"refs":[{"id":"ref-for-crash-reports"},{"id":"ref-for-crash-reports\u2460"},{"id":"ref-for-crash-reports\u2461"}],"title":"3. Crash Reports"},{"refs":[{"id":"ref-for-crash-reports\u2462"},{"id":"ref-for-crash-reports\u2463"},{"id":"ref-for-crash-reports\u2464"},{"id":"ref-for-crash-reports\u2465"}],"title":"3.1. Crash Reports Delivery Priority"}],"url":"#crash-reports"},
 "crashreportbody-is_top_level": {"dfnID":"crashreportbody-is_top_level","dfnText":"is_top_level","external":false,"refSections":[],"url":"#crashreportbody-is_top_level"},
-"crashreportbody-page_visibility": {"dfnID":"crashreportbody-page_visibility","dfnText":"page_visibility","external":false,"refSections":[],"url":"#crashreportbody-page_visibility"},
 "crashreportbody-reason": {"dfnID":"crashreportbody-reason","dfnText":"reason","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-reason"},{"id":"ref-for-crashreportbody-reason\u2460"},{"id":"ref-for-crashreportbody-reason\u2461"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-reason"},
 "crashreportbody-stack": {"dfnID":"crashreportbody-stack","dfnText":"stack","external":false,"refSections":[{"refs":[{"id":"ref-for-crashreportbody-stack"}],"title":"3. Crash Reports"}],"url":"#crashreportbody-stack"},
+"crashreportbody-visibility_state": {"dfnID":"crashreportbody-visibility_state","dfnText":"visibility_state","external":false,"refSections":[],"url":"#crashreportbody-visibility_state"},
 "dictdef-crashreportbody": {"dfnID":"dictdef-crashreportbody","dfnText":"CrashReportBody","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-crashreportbody"}],"title":"3. Crash Reports"}],"url":"#dictdef-crashreportbody"},
 "dom-crashreportbody-is_top_level": {"dfnID":"dom-crashreportbody-is_top_level","dfnText":"is_top_level","external":false,"refSections":[],"url":"#dom-crashreportbody-is_top_level"},
-"dom-crashreportbody-page_visibility": {"dfnID":"dom-crashreportbody-page_visibility","dfnText":"page_visibility","external":false,"refSections":[],"url":"#dom-crashreportbody-page_visibility"},
 "dom-crashreportbody-reason": {"dfnID":"dom-crashreportbody-reason","dfnText":"reason","external":false,"refSections":[],"url":"#dom-crashreportbody-reason"},
 "dom-crashreportbody-stack": {"dfnID":"dom-crashreportbody-stack","dfnText":"stack","external":false,"refSections":[],"url":"#dom-crashreportbody-stack"},
+"dom-crashreportbody-visibility_state": {"dfnID":"dom-crashreportbody-visibility_state","dfnText":"visibility_state","external":false,"refSections":[],"url":"#dom-crashreportbody-visibility_state"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -1722,7 +1744,12 @@ function hideRefHint(refHint) {
 function showRefHint(link) {
     if(link.classList.contains("dfn-link")) return;
     const url = link.getAttribute("href");
-    const ref = refsData[url];
+    const refHintKey = link.getAttribute("data-refhint-key");
+    let key = url;
+    if(refHintKey) {
+        key = refHintKey + "_" + url;
+    }
+    const ref = refsData[key];
     if(!ref) return;
 
     hideAllRefHints(); // Only display one at this time.
