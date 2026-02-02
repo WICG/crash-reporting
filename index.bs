@@ -19,9 +19,15 @@ Include MDN Panels: no
 <pre class="anchors">
 url: https://tc39.es/proposal-error-stacks/#sec-get-error.prototype-stack; type: dfn; spec: ERROR STACKS
   text: Error.prototype.stack
+url: https://html.spec.whatwg.org/C#unique-internal-value; type: dfn;
+  text: unique internal value
+url: https://html.spec.whatwg.org/C#new-unique-internal-value; type: dfn
+  text: new unique internal value
 </pre>
 <pre class="link-defaults">
   spec:dom; type:dfn; for:/; text:document
+  spec:infra; type:dfn; text:user agent
+  spec:webidl; type:interface; text:any
 </pre>
 
 Introduction {#intro}
@@ -76,6 +82,7 @@ dictionary CrashReportBody : ReportBody {
   DOMString stack;
   boolean is_top_level;
   DocumentVisibilityState visibility_state;
+  object crash_report_api;
 };
 </xmp>
 
@@ -124,6 +131,13 @@ A [=crash report=]'s [=report/body=], represented in JavaScript by
   It represents whether the visual viewport that the crashed {{Document}} was hosted in was
   visible at all, or fully occluded.
 
+* <dfn for="CrashReportBody" noexport>crash_report_api</dfn>: A JSON dictionary of arbitrary
+  key/value data obtained by deserializing the memory buffer in [=user agent=]'s [=user
+  agent/crash report buffers=] map, identified by a crashing {{Document}}'s
+  {{CrashReportContext}}'s [=CrashReportContext/backing buffer ID=] member. This buffer is
+  deserialized as a JSON-formatted string, and its keys and values are appended to this {{any}}
+  object member of the {{CrashReportBody}}.
+
 Note: Crash reports are not observable to JavaScript, as the page which would
 receive them is, by definition, not able to. The IDL description of
 CrashReportBody exists in this spec to provide a JSON-seriaizable interface
@@ -142,6 +156,183 @@ If neither [=endpoint=] is specified, [=crash reports=] are not delivered.
     Reporting-Endpoints: crash-reporting="https://example.com/reports"
   </pre>
 </div>
+
+The {{CrashReportContext}} interface {#crash-report-storage}
+===========================
+
+<pre class="idl">
+  partial interface Window {
+    readonly attribute CrashReportContext crashReport;
+  };
+</pre>
+
+Each {{Window}} object has an associated <dfn for=Window>crashReport</dfn>, which is a
+{{CrashReportContext}} instance created alongside the {{Window}}.
+
+<div algorithm>
+  The <dfn attribute for=Window>crashReport</dfn> getter steps are:
+    1. If [=this=]'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully
+       active=], then return null.
+
+    1. Return [=this=]'s [=relevant global object=]'s [=Window/crashReport=] object.
+
+  <wpt>
+    /reporting/crashReport-test.html
+  </wpt>
+</div>
+
+<pre class="idl">
+  [Exposed=Window]
+  interface CrashReportContext {
+      Promise&lt;undefined&gt; initialize(unsigned long long length);
+      undefined set(DOMString key, DOMString value);
+      undefined delete(DOMString key);
+  };
+</pre>
+
+Each {{CrashReportContext}} object has an associated <dfn for=CrashReportContext>internal map</dfn>,
+which is a [=map=] whose [=map/keys=] and [=map/values=] are both {{DOMString}}s.
+
+The [=user agent=] has an associated <dfn for="user agent">crash report buffers</dfn>, which is a
+[=map=] whose [=map/keys=] are [=unique internal values=] and whose [=map/values=] are [=implementation-defined=] values.
+
+Note: The [=CrashReportContext/internal map=] is a map-representation of the data that will
+eventually appear in a crash report, and it exists to ergonomically interact with this data via
+[=map=] semantics. But implementations of this specification, especially those supporting site
+isolation, will likely ultimately serialize its entire contents to a backing shared memory buffer
+tracked by the [=user agent=]'s [=user agent/crash report buffers=] map. The [=map/values=] of that
+map are expected to be those memory buffers that span the web process and whatever OS process is
+responsible for sending crash reports when a web process crashes, and its
+[=CrashReportContext/internal map=] is no longer available to read from.
+
+Each {{CrashReportContext}} object has an associated <dfn for=CrashReportContext>backing buffer
+ID</dfn>, which is a null-or-[=unique internal value=]; it is initially null.
+
+Each {{CrashReportContext}} object has an associated <dfn for=CrashReportContext>is buffer
+initialized</dfn> [=boolean=], which is initially false.
+
+Note: This member is asynchronously set to true when the backing memory buffer associated with
+[=this=]'s [=CrashReportContext/backing buffer ID=] is initialized.
+
+Each {{CrashReportContext}} object has an associated {{unsigned long long}} <dfn
+for=CrashReportContext>buffer length</dfn>, which is initially 0.
+
+Note: This gets assigned once in {{CrashReportContext/initialize()}}, and tracks the maximum number
+of bytes that any call to {{CrashReportContext/set()}} can write to the memory backing
+[=CrashReportContext/internal map=].
+
+<p class=note>The [=CrashReportContext/internal map=] is used to hold all keys/values that will be
+supplied to the developer via {{CrashReportBody}}s. In browsers with site isolation, the physical
+process that writes to this data is different from the one that reads from it and sends the [=crash
+reports=]. Therefore, it is expected that implementations maintain this map as a shared memory
+buffer spanning the two processes. This is what the Chromium implementation of this API does.</p>
+
+<div algorithm>
+  The <dfn method for=CrashReportContext>initialize(|length|)</dfn> method steps are:
+
+    1. If [=this=]'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully
+       active=], then [=throw=] a [=new=] "{{InvalidStateError}}" {{DOMException}}.
+
+       Note: This will be surfaced to the user via a rejected {{Promise}}.
+
+    1. If [=this=]'s [=CrashReportContext/backing buffer ID=] is non-null, then [=throw=] a [=new=]
+       "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If |length| is &gt; than 5 \* 1024 \* 1024, then [=throw=] a [=new=] "{{NotAllowedError}}"
+       {{DOMException}}.
+
+       Note: The limit for the crash report memory buffer is 5 megabytes.
+
+    1. Set [=this=]'s [=CrashReportContext/buffer length=] to |length|.
+
+    1. Set [=this=]'s [=CrashReportContext/backing buffer ID=] to the result of [=new unique
+       internal value|creating a new unique internal value=].
+
+    1. Let |cachedThis| be [=this=].
+
+    1. Let |promise| be a [=a new promise=].
+
+    1. Run these steps [=in parallel=]:
+
+       1. Let |backing buffer ID| be |cachedThis|'s [=CrashReportContext/backing buffer ID=].
+
+       1. Run [=implementation-defined=] steps to create and initialize a backing memory store of
+          |length| bytes.
+
+       1. If such a buffer was created, then:
+
+          1. Set the [=user agent=]'s [=user agent/crash report buffers=][|backing buffer ID|] to the
+             buffer.
+
+          1. Set |cachedThis|'s [=CrashReportContext/is buffer initialized=] to true.
+
+       1. [=Queue a global task=] on the [=DOM manipulation task source=] given |cachedThis|'s
+          [=relevant global object=], to [=resolve=] |promise| with {{undefined}}.
+
+    1. Return |promise|.
+
+  <wpt>
+    /reporting/crashReport-test.html
+  </wpt>
+</div>
+
+<div algorithm>
+  The <dfn method for=CrashReportContext>set(|key|, |value|)</dfn> method steps are:
+
+    1. If [=this=]'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully
+       active=], then [=throw=] a [=new=] "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If [=this=]'s [=CrashReportContext/is buffer initialized=] is false, then [=throw=] a [=new=]
+       "{{InvalidStateError}}" {{DOMException}}.
+
+       Note: This will be false both before {{CrashReportContext/initialize()}} is called, and
+       *after* it is called but before its returned {{Promise}} resolves. It ensures that
+       {{CrashReportContext/set()}} only works when the backing buffer identified by the
+       [=CrashReportContext/backing buffer ID=] is fully initialized.
+
+    1. [=map/Set=] [=this=]'s [=CrashReportContext/internal map=][|key|] to |value|.
+
+    1. Let |serialization| be the result of [=serializing a JavaScript value to JSON bytes=], given
+       [=this=]'s [=CrashReportContext/internal map=].
+
+    1. If |serialization|'s [=list/size=] is &gt; [=this=]'s [=CrashReportContext/buffer length=], then:
+
+       1. [=map/Remove=] [=this=]'s [=CrashReportContext/internal map=][|key|].
+
+       1. [=Throw=] a [=new=] "{{NotAllowedError}}" {{DOMException}}.
+
+    1. Let |backing buffer ID| be [=this=]'s [=CrashReportContext/backing buffer ID=].
+
+    1. Write |serialization| to the [=user agent=]'s [=crash report buffers=][|backing buffer ID|].
+
+  <wpt>
+    /reporting/crashReport-test.html
+  </wpt>
+</div>
+
+<div algorithm>
+  The <dfn method for=CrashReportContext>delete(|key|)</dfn> method steps are:
+
+    1. If [=this=]'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully
+       active=], then [=throw=] a [=new=] "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If [=this=]'s [=CrashReportContext/is buffer initialized=] is false, then [=throw=] a [=new=]
+       "{{InvalidStateError}}" {{DOMException}}.
+
+    1. [=map/Remove=] [=this=]'s [=CrashReportContext/internal map=][|key|].
+
+    1. Let |serialization| be the result of [=serializing a JavaScript value to JSON bytes=], given
+       [=this=]'s [=CrashReportContext/internal map=].
+
+    1. Let |backing buffer ID| be [=this=]'s [=CrashReportContext/backing buffer ID=].
+
+    1. Write |serialization| to the [=user agent=]'s [=crash report buffers=][|backing buffer ID|].
+
+  <wpt>
+    /reporting/crashReport-test.html
+  </wpt>
+</div>
+
 
 Document Policy Integration {#document-policy}
 ===========================
